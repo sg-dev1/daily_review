@@ -4,13 +4,13 @@ import { IsNotEmpty } from 'class-validator';
 export class RegisterRequestDto {
   @ApiProperty({ required: true })
   @IsNotEmpty()
-  username: string;
+  username!: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
-  password: string;
+  password!: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
-  email: string;
+  email!: string;
 }

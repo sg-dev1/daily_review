@@ -4,7 +4,7 @@ import { IsNotEmpty } from 'class-validator';
 export class JwtPayloadDto {
   @ApiProperty({ required: true })
   @IsNotEmpty()
-  username: string;
+  username!: string;
 
   iat?: number;
   exp?: number;

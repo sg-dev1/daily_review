@@ -6,15 +6,15 @@ export class CreateUserDto {
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsString()
-  username: string;
+  username!: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsString()
-  password: string;
+  password!: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
   @IsEmail()
-  email: string;
+  email!: string;
 }

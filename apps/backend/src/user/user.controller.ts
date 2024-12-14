@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,6 +26,16 @@ interface UserControllerResultWithSingleData extends UserControllerResult {
   data: UserEntity | null;
 }
 
+const checkedHttpException = (error: unknown): string => {
+  let result = '';
+  if (error instanceof HttpException) {
+    result = error.message;
+  } else {
+    result = 'Unknown error: ' + String(error);
+  }
+  return result;
+};
+
 @Controller('users') //route group
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -40,10 +51,10 @@ export class UserController {
         success: true,
         message: 'User Created Successfully',
       };
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         success: false,
-        message: error.message,
+        message: checkedHttpException(error),
       };
     }
   }
@@ -59,10 +70,10 @@ export class UserController {
         data,
         message: 'User Fetched Successfully',
       };
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         success: false,
-        message: error.message,
+        message: checkedHttpException(error),
         data: [],
       };
     }
@@ -79,10 +90,10 @@ export class UserController {
         data,
         message: 'User Fetched Successfully',
       };
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         success: false,
-        message: error.message,
+        message: checkedHttpException(error),
         data: null,
       };
     }
@@ -99,10 +110,10 @@ export class UserController {
         success: true,
         message: 'User Updated Successfully',
       };
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         success: false,
-        message: error.message,
+        message: checkedHttpException(error),
       };
     }
   }
@@ -115,10 +126,10 @@ export class UserController {
         success: true,
         message: 'User Deleted Successfully',
       };
-    } catch (error) {
+    } catch (error: unknown) {
       return {
         success: false,
-        message: error.message,
+        message: checkedHttpException(error),
       };
     }
   }

@@ -4,8 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-
-import * as ormConfig from 'src/config/ormconfig';
+import ormConfig from './config/ormconfig';
 import { JwtStrategy } from './auth/strategy/jwt.strategy';
 import { JwtGuard } from './auth/utils/jwt.guard';
 import { APP_GUARD } from '@nestjs/core';

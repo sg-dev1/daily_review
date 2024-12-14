@@ -6,7 +6,9 @@ const eslintConfig = [
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'warn',
       '@typescript-eslint/explicit-module-boundary-types': 'warn',
-      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      // TODO: fixme - handling of environment variables together with turborepo
+      'turbo/no-undeclared-env-vars': 'off',
     },
   },
 ];

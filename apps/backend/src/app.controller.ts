@@ -9,10 +9,10 @@ export class AppController {
 
   @Public()
   @Get()
-  async getRootPage(
+  getRootPage(
     @Res()
     response: Response,
-  ) {
+  ): void {
     //console.log('process.env.NODE_ENV', process.env.NODE_ENV);
     if (process.env.NODE_ENV === 'development') {
       response.redirect('/api-docs');

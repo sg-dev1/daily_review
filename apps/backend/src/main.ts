@@ -9,7 +9,7 @@ import {
 } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
 

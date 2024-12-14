@@ -3,8 +3,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { JwtPayloadDto } from '../dto/jwt-payload.dto';
 import { UserService } from 'src/user/user.service';
+import { UserEntity } from 'src/user/entities/user.entity';
+import type { Request } from 'express';
 
-const cookieExtractor = (req: any) => {
+const cookieExtractor = (req?: Request): string | null => {
   //console.log('cookieExtractor - req?.cookies', req);
   // If put into Authentication cookie (like in MAD) it needs to be extracted like so:
   // return req?.cookies?.Authentication;
@@ -25,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: JwtPayloadDto) {
+  async validate(payload: JwtPayloadDto): Promise<UserEntity> {
     //console.log('payload', payload);
     // example output payload { username: 'user2xxxxxxx', iat: 1732527504, exp: 1732613904 }
 

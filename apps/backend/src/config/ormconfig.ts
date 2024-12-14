@@ -22,4 +22,4 @@ const ormConfig: DataSourceOptions = {
   // },
 };
 
-export = ormConfig;
+export default ormConfig;

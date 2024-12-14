@@ -28,7 +28,7 @@ export class AuthController {
     response: Response,
     @Body()
     userLoginDto: UserLoginDto,
-  ) {
+  ): Promise<Response> {
     //const ua = UAParser(req.headers['user-agent']);
     /* TODO
     const refreshTokenPayload: Partial<RefreshToken> = {
@@ -68,7 +68,7 @@ export class AuthController {
     @Res()
     response: Response,
     @Body() registerBody: RegisterRequestDto,
-  ) {
+  ): Promise<Response> {
     const accessToken = await this.authService.register(registerBody);
     response.cookie('jwt', accessToken, { httpOnly: true });
     return response.status(HttpStatus.NO_CONTENT).json({});

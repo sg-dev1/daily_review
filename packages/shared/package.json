@@ -1,0 +1,20 @@
+{
+  "name": "@repo/shared",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "private": true,
+  "exports": {},
+  "scripts": {
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^20.11.24",
+    "typescript": "5.5.4"
+  },
+  "dependencies": {}
+}

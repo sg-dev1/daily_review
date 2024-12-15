@@ -12,11 +12,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
-
-interface UserControllerResult {
-  success: boolean;
-  message: string;
-}
+import { UserControllerResult } from '@repo/shared';
 
 interface UserControllerResultWithData extends UserControllerResult {
   data: UserEntity[];

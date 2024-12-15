@@ -1,8 +1,8 @@
-- Improve config of backend, e.g. to use base config from typescript-config
+- Improve config of backend, e.g. to use base config from typescript-config                                          [done]
    - fix all linter warnings of backend first
-- Add a shared library project for shared code between frontend and backend (e.g. dtos)
-- Dockerfiles for frontend and backend
-- docker compose starting frontend, backend containers + db container; could also add reverse proxy (using nginx)
-- throw away unneeded stuff (web, docs, ui package)
+- Add a shared library project for shared code between frontend and backend (e.g. dtos)                              // TODO
+- Dockerfiles for frontend and backend                                                                               // TODO
+- docker compose starting frontend, backend containers + db container; could also add reverse proxy (using nginx)    // TODO
+- throw away unneeded stuff (web, docs, ui package)                                                                  // TODO
 
-- features dev
+- features dev                                                                                                       // TODO

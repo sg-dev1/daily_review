@@ -3,17 +3,42 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { UserLoginDtoType } from '@repo/shared';
+import axios from 'axios';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const loginFormSchema = z.object({
   username: z.string().min(2).max(50),
   password: z.string().min(2).max(50),
 });
 
+const postLogin = async (data: UserLoginDtoType) => {
+  const response = await axios.post('', data);
+};
+
 const LoginForm = () => {
+  // Access the client
+  //const queryClient = useQueryClient();
+
+  // Mutations
+  /*
+  const mutation = useMutation({
+    mutationFn: postLogin,
+    onSuccess: () => {
+      console.log('success - you are logged in');
+      // Invalidate and refetch
+      //queryClient.invalidateQueries({ queryKey: ['login'] })
+    },
+    onError: () => {
+      console.error('error - login failed');
+    },
+  });
+  */
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -28,6 +53,8 @@ const LoginForm = () => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+
+    //mutation.mutate(values);
   }
 
   return (

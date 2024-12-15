@@ -1,81 +1,102 @@
 # Turborepo starter
 
-This is an official starter Turborepo.
-
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
+This monorepo is based on the official starter of Turborepo.
 
 ## What's inside?
 
-This Turborepo includes the following packages/apps:
+Besides the apps already present in the official starter (see [original README](./README_original.md)) the following packages/apps are included:
 
-### Apps and Packages
+- `frontend`: a [Next.js](https://nextjs.org/) app
+- `backend`: a [Nest.js](https://nestjs.com/) app
+- `@repo/shared`: shared Typescript code between frontend and backend
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+## Initial Setup
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Install Node.js
 
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+- Developed using Node.js v22.12.0
+- Install node version manager to install node.js:
 
 ```
-cd my-turborepo
-pnpm build
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+nvm install 22
 ```
 
-### Develop
-
-To develop all apps and packages, run the following command:
+### Install turborepo and pnpm as package manager
 
 ```
-cd my-turborepo
-pnpm dev
+npm install turbo --global
+curl -fsSL https://get.pnpm.io/install.sh | sh -
 ```
 
-### Remote Caching
+## Important Commands
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+### Basic Commands
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+Install all dependencies
 
 ```
-npx turbo link
+pnpm install
 ```
 
-## Useful Links
+Build all projects
 
-Learn more about the power of Turborepo:
+```
+turbo build
+```
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+Start all projects in development mode
+
+```
+turbo dev
+```
+
+Run linter on all projects
+
+```
+turbo lint
+```
+
+### Development database start/stop (within docker)
+
+These commands are defined in the top level package.json scripts:
+
+Start the postgres docker container (docker-compose-local-db.yml):
+
+```
+pnpm db
+```
+
+Stop the postgres docker container (docker-compose-local-db.yml):
+
+```
+pnpm db:down
+```
+
+### DB handling and migration
+
+The following turbo commands are defined in the [package turbo.json](https://turbo.build/repo/docs/reference/package-configurations) of the backend project.
+
+Regenerate a new migration deleting the old one.
+
+```
+turbo orm-reg
+```
+
+Apply the migration to the database.
+
+```
+turbo migrate
+```
+
+Generate a new migration file.
+
+```
+turbo orm-generate
+```
+
+Drop the current database schema
+
+```
+turbo drop
+```

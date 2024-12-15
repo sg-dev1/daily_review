@@ -12,15 +12,12 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { UserControllerResult } from '@repo/shared';
-
-interface UserControllerResultWithData extends UserControllerResult {
-  data: UserEntity[];
-}
-
-interface UserControllerResultWithSingleData extends UserControllerResult {
-  data: UserEntity | null;
-}
+import {
+  UserControllerResult,
+  UserControllerResultWithData,
+  UserControllerResultWithSingleData,
+  UserEntityDto,
+} from '@repo/shared';
 
 const checkedHttpException = (error: unknown): string => {
   let result = '';
@@ -58,12 +55,13 @@ export class UserController {
   @Get()
   async findAll(): Promise<UserControllerResultWithData> {
     try {
-      const data = (await this.userService.findAll()).map((entity) =>
-        entity.toSanitized(),
+      const data: UserEntity[] = await this.userService.findAll();
+      const dataAsDto: UserEntityDto[] = data.map((entity: UserEntity) =>
+        entity.toSanitizedDto(),
       );
       return {
         success: true,
-        data,
+        data: dataAsDto,
         message: 'User Fetched Successfully',
       };
     } catch (error: unknown) {
@@ -80,7 +78,7 @@ export class UserController {
     @Param('id') id: string,
   ): Promise<UserControllerResultWithSingleData> {
     try {
-      const data = (await this.userService.findOne(+id)).toSanitized();
+      const data = (await this.userService.findOne(+id)).toSanitizedDto();
       return {
         success: true,
         data,

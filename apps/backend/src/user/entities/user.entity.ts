@@ -1,3 +1,4 @@
+import { UserEntityDto } from '@repo/shared';
 import { Exclude } from 'class-transformer';
 import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 
@@ -25,7 +26,7 @@ export class UserEntity {
   })
   password!: string;
 
-  public toSanitized(): UserEntity {
+  public toSanitizedDto(): UserEntityDto {
     return { ...this, password: '' };
   }
 }

@@ -28,7 +28,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # First install the dependencies (as they change less often)
-# TODO out is correct directory?
+# Note: the out folder is created by "turbo prune frontend --docker", see
+# https://turbo.build/repo/docs/guides/tools/docker
 COPY --from=builder /app/out/json/ .
 RUN pnpm install
 

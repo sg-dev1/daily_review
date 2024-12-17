@@ -16,28 +16,36 @@ const loginFormSchema = z.object({
   password: z.string().min(2).max(50),
 });
 
+// TODO move this into some "api-client" module
 const postLogin = async (data: UserLoginDtoType) => {
-  const response = await axios.post('', data);
+  // TODO - need to make this configurable
+  const response = await axios.post('http://localhost:7777/auth/login', data);
+  console.log('postLogin response', response);
+  return response;
 };
 
 const LoginForm = () => {
   // Access the client
-  //const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   // Mutations
-  /*
   const mutation = useMutation({
     mutationFn: postLogin,
-    onSuccess: () => {
-      console.log('success - you are logged in');
+    onSuccess: (data, variables, context) => {
+      console.log(
+        'success - you are logged in',
+        data /* AxiosResponse object */,
+        variables /* login dto */,
+        context /* undefined */
+      );
       // Invalidate and refetch
       //queryClient.invalidateQueries({ queryKey: ['login'] })
     },
     onError: () => {
-      console.error('error - login failed');
+      console.warn('error - login failed');
+      // TODO show failed message
     },
   });
-  */
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof loginFormSchema>>({
@@ -52,9 +60,9 @@ const LoginForm = () => {
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    //console.log(values);
 
-    //mutation.mutate(values);
+    mutation.mutate(values);
   }
 
   return (

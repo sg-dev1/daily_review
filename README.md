@@ -113,3 +113,12 @@ Drop the current database schema
 ```
 turbo drop
 ```
+
+### Adding a new UI component from shadcn to the frontend
+
+In the following example the [Alert component](https://ui.shadcn.com/docs/components/alert) will be added to the frontend project.
+
+```
+cd apps/frontend
+pnpm dlx shadcn@latest add alert
+```

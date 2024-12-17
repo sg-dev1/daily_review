@@ -7,9 +7,11 @@ import { UserLoginDtoType } from '@repo/shared';
 import axios from 'axios';
 
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import ErrorAlert from './alerts/ErrorAlert';
 
 const loginFormSchema = z.object({
   username: z.string().min(2).max(50),
@@ -25,6 +27,8 @@ const postLogin = async (data: UserLoginDtoType) => {
 };
 
 const LoginForm = () => {
+  const [errorText, setErrorText] = useState('');
+
   // Access the client
   const queryClient = useQueryClient();
 
@@ -38,12 +42,11 @@ const LoginForm = () => {
         variables /* login dto */,
         context /* undefined */
       );
-      // Invalidate and refetch
-      //queryClient.invalidateQueries({ queryKey: ['login'] })
+      setErrorText('');
     },
     onError: () => {
       console.warn('error - login failed');
-      // TODO show failed message
+      setErrorText('Login failed.');
     },
   });
 
@@ -67,6 +70,7 @@ const LoginForm = () => {
 
   return (
     <Form {...form}>
+      <ErrorAlert message={errorText} />
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}

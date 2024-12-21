@@ -15,8 +15,9 @@
       - prepared for reverse proxy, but for simple setup could go without it
         (requires again new config)
       - testing of setup and improving (check with my (infrastructure - homelab) docker containers)
-- docker deployment missing points                                                                                   // TODO
+- docker deployment missing points                                                                                   [done]
    - run db migrations (decide how to do it --> currently 500er error because db not setup)
+   - for simplicity configured a drop - create at each application start
 
 - throw away unneeded stuff (web, docs, ui package)                                                                  // TODO
 

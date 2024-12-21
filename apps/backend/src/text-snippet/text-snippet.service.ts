@@ -4,6 +4,7 @@ import { UpdateTextSnippetDto } from './dto/update-text-snippet.dto';
 import { TextSnippet } from './entities/text-snippet.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class TextSnippetService {
@@ -14,9 +15,10 @@ export class TextSnippetService {
 
   async create(
     createTextSnippetDto: CreateTextSnippetDto,
+    user: User,
   ): Promise<TextSnippet> {
-    const userData =
-      await this.textSnippetRepository.create(createTextSnippetDto);
+    const textSnippet = { ...createTextSnippetDto, userId: user.id };
+    const userData = await this.textSnippetRepository.create(textSnippet);
     return this.textSnippetRepository.save(userData);
   }
 

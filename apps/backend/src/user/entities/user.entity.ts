@@ -1,14 +1,18 @@
-import { UserEntityDto } from '@repo/shared';
+import { UserDto } from '@repo/shared';
 import { Exclude } from 'class-transformer';
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Index,
+  OneToMany,
+} from 'typeorm';
+import { TextSnippet } from '../../text-snippet/entities/text-snippet.entity';
 
 @Entity()
-export class UserEntity {
+export class User {
   @PrimaryGeneratedColumn()
   id!: number;
-
-  //@Column()
-  //fullName: string;
 
   @Column({ unique: true })
   email!: string;
@@ -26,7 +30,15 @@ export class UserEntity {
   })
   password!: string;
 
-  public toSanitizedDto(): UserEntityDto {
+  // ---
+  // Relations
+
+  @OneToMany(() => TextSnippet, (textSnippet) => textSnippet.user)
+  textSnippets: TextSnippet[];
+
+  // ---
+
+  public toSanitizedDto(): UserDto {
     return { ...this, password: '' };
   }
 }

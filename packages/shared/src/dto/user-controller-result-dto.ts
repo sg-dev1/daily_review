@@ -1,6 +1,6 @@
 import { CreateUserDtoType } from './user-controller-types';
 
-export interface UserEntityDto extends CreateUserDtoType {
+export interface UserDto extends CreateUserDtoType {
   id: number;
 }
 
@@ -10,9 +10,9 @@ export interface UserControllerResult {
 }
 
 export interface UserControllerResultWithData extends UserControllerResult {
-  data: UserEntityDto[];
+  data: UserDto[];
 }
 
 export interface UserControllerResultWithSingleData extends UserControllerResult {
-  data: UserEntityDto | null;
+  data: UserDto | null;
 }

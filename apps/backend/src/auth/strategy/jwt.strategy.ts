@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { JwtPayloadDto } from '../dto/jwt-payload.dto';
 import { UserService } from 'src/user/user.service';
-import { UserEntity } from 'src/user/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 import type { Request } from 'express';
 
 const cookieExtractor = (req?: Request): string | null => {
@@ -27,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: JwtPayloadDto): Promise<UserEntity> {
+  async validate(payload: JwtPayloadDto): Promise<User> {
     //console.log('payload', payload);
     // example output payload { username: 'user2xxxxxxx', iat: 1732527504, exp: 1732613904 }
 

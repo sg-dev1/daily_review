@@ -1,11 +1,18 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class TextSnippet {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @CreateDateColumn()
   createdAt!: Date;
 
   @Column()
@@ -22,6 +29,15 @@ export class TextSnippet {
 
   @Column()
   location: string;
+
+  // ---
+  // Relations
+
+  @ManyToOne(() => User, (user) => user.textSnippets)
+  user: User;
+
+  @Column()
+  userId: number;
 
   // future: Tags (could be own table)
 }

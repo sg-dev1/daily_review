@@ -17,6 +17,8 @@ import {
   TextSnippetControllerResultWithSingleData,
 } from '@repo/shared';
 import { TextSnippet } from './entities/text-snippet.entity';
+import { GetUser } from 'src/auth/utils/get-user.decorator';
+import { User } from 'src/user/entities/user.entity';
 
 @Controller('text-snippet')
 export class TextSnippetController {
@@ -25,9 +27,10 @@ export class TextSnippetController {
   @Post()
   async create(
     @Body() createTextSnippetDto: CreateTextSnippetDto,
+    @GetUser() user: User,
   ): Promise<TextSnippetControllerResult> {
     try {
-      await this.textSnippetService.create(createTextSnippetDto);
+      await this.textSnippetService.create(createTextSnippetDto, user);
 
       return {
         success: true,

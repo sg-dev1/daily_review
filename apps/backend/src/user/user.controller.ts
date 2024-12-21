@@ -10,12 +10,12 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserEntity } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import {
   UserControllerResult,
   UserControllerResultWithData,
   UserControllerResultWithSingleData,
-  UserEntityDto,
+  UserDto,
 } from '@repo/shared';
 import { checkedHttpException } from 'src/utils/checkedHttpException';
 
@@ -45,8 +45,8 @@ export class UserController {
   @Get()
   async findAll(): Promise<UserControllerResultWithData> {
     try {
-      const data: UserEntity[] = await this.userService.findAll();
-      const dataAsDto: UserEntityDto[] = data.map((entity: UserEntity) =>
+      const data: User[] = await this.userService.findAll();
+      const dataAsDto: UserDto[] = data.map((entity: User) =>
         entity.toSanitizedDto(),
       );
       return {

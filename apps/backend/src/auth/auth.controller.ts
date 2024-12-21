@@ -12,7 +12,7 @@ import { UserLoginDto } from './dto/user-login.dto';
 import type { Request, Response } from 'express';
 import { Public } from './utils/public.decorator';
 import { RegisterRequestDto } from './dto/register-request.dto';
-import { UserEntity } from 'src/user/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 //import { UAParser } from 'ua-parser-js';
 
 @Public()
@@ -39,7 +39,7 @@ export class AuthController {
     };
     */
     //console.log(userLoginDto);
-    let user: UserEntity | null = null;
+    let user: User | null = null;
     try {
       // Do the login here, no need to have an additional local (passport) strategy
       user = await this.authService.validateUser(

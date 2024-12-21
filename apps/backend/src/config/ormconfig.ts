@@ -22,4 +22,6 @@ const ormConfig: DataSourceOptions = {
   // },
 };
 
+//console.log('Using ormConfig', ormConfig);
+
 export default ormConfig;

@@ -2,7 +2,7 @@
    - fix all linter warnings of backend first
 - Add a shared library project for shared code between frontend and backend (e.g. dtos)                              [done]
 - Integrate tanstack query into frontend and establish link to backend                                               [done]
-- Dockerfiles for frontend and backend                                                                               // in progress
+- Dockerfiles for frontend and backend                                                                               [done]
    https://github.com/vercel/turborepo/tree/main/examples/with-docker
    @frontend (nextjs):
       - decide what base image
@@ -10,11 +10,13 @@
    @backend (nestjs):
       - install turbo and pnpm into the container (as for frontend)
       - check other TODOs (should be resolved when frontend is ok)
-- docker compose starting frontend, backend containers + db container; could also add reverse proxy (using nginx)    // in progress
+- docker compose starting frontend, backend containers + db container; could also add reverse proxy (using nginx)    [done]
    docker-compose.yml:
       - prepared for reverse proxy, but for simple setup could go without it
         (requires again new config)
       - testing of setup and improving (check with my (infrastructure - homelab) docker containers)
+- docker deployment missing points                                                                                   // TODO
+   - run db migrations (decide how to do it --> currently 500er error because db not setup)
 
 - throw away unneeded stuff (web, docs, ui package)                                                                  // TODO
 

@@ -6,17 +6,17 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 # Set working directory
 WORKDIR /app
-# TODO find out from frontend what are the correct commands
-RUN npm install pnpm --global
 RUN npm install turbo --global
 
 COPY . .
 RUN turbo prune backend --docker
 
+
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
 RUN apk update
 RUN apk add --no-cache libc6-compat
+RUN npm install pnpm --global
 WORKDIR /app
 
 # First install the dependencies (as they change less often)
@@ -27,6 +27,7 @@ RUN pnpm install
 
 # Build the project
 COPY --from=builder /app/out/full/ .
+RUN npm install turbo --global
 
 # Uncomment and use build args to enable remote caching
 # ARG TURBO_TEAM
@@ -35,8 +36,8 @@ COPY --from=builder /app/out/full/ .
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-#RUN yarn turbo build
 RUN turbo build
+
 
 FROM base AS runner
 WORKDIR /app
@@ -47,4 +48,4 @@ RUN adduser --system --uid 1001 nestjs
 USER nestjs
 COPY --from=installer /app .
 
-CMD node apps/backend/dist/index.js
+CMD node apps/backend/dist/main.js

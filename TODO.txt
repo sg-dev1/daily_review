@@ -22,3 +22,8 @@
 - throw away unneeded stuff (web, docs, ui package)                                                                  // TODO
 
 - features dev                                                                                                       // TODO
+  - CSV upload (text snippet data)   POST
+  - Create new snippet               POST
+  - Display snippet data             GET
+  - Update data                      PUT/ PATCH
+  - Delete data                      DELETE

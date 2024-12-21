@@ -9,7 +9,7 @@ import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import ErrorAlert from './alerts/ErrorAlert';
 
@@ -30,7 +30,7 @@ const LoginForm = () => {
   const [errorText, setErrorText] = useState('');
 
   // Access the client
-  const queryClient = useQueryClient();
+  //const queryClient = useQueryClient();
 
   // Mutations
   const mutation = useMutation({

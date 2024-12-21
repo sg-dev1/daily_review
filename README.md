@@ -123,6 +123,13 @@ cd apps/frontend
 pnpm dlx shadcn@latest add alert
 ```
 
+### Resource generation in nestjs
+
+```
+cd apps/backend
+nest g resource <resource-name>
+```
+
 ## Docker Setup
 
 - The `.env` file of `apps/backend` is not used

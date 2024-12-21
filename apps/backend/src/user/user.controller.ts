@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  HttpException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,16 +17,7 @@ import {
   UserControllerResultWithSingleData,
   UserEntityDto,
 } from '@repo/shared';
-
-const checkedHttpException = (error: unknown): string => {
-  let result = '';
-  if (error instanceof HttpException) {
-    result = error.message;
-  } else {
-    result = 'Unknown error: ' + String(error);
-  }
-  return result;
-};
+import { checkedHttpException } from 'src/utils/checkedHttpException';
 
 @Controller('users') //route group
 export class UserController {

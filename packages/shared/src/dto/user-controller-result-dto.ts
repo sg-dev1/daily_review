@@ -1,8 +1,7 @@
-export interface UserEntityDto {
+import { CreateUserDtoType } from './user-controller-types';
+
+export interface UserEntityDto extends CreateUserDtoType {
   id: number;
-  email: string;
-  username: string;
-  password: string;
 }
 
 export interface UserControllerResult {

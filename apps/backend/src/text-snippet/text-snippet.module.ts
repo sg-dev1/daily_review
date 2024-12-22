@@ -4,9 +4,15 @@ import { TextSnippetController } from './text-snippet.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TextSnippet } from './entities/text-snippet.entity';
 import { User } from 'src/user/entities/user.entity';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TextSnippet, User])],
+  imports: [
+    TypeOrmModule.forFeature([TextSnippet, User]),
+    MulterModule.register({
+      dest: './uploads/csv',
+    }),
+  ],
   controllers: [TextSnippetController],
   providers: [TextSnippetService],
   exports: [],

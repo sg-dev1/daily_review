@@ -22,6 +22,18 @@ export class TextSnippetService {
     return this.textSnippetRepository.save(userData);
   }
 
+  async createMany(
+    createTextSnippetDtos: CreateTextSnippetDto[],
+    user: User,
+  ): Promise<TextSnippet[]> {
+    const textSnippets = createTextSnippetDtos.map((dto) => ({
+      ...dto,
+      userId: user.id,
+    }));
+    const userData = await this.textSnippetRepository.create(textSnippets);
+    return this.textSnippetRepository.save(userData);
+  }
+
   async findAll(): Promise<TextSnippet[]> {
     return await this.textSnippetRepository.find();
   }

@@ -130,6 +130,20 @@ cd apps/backend
 nest g resource <resource-name>
 ```
 
+### Installing packages using pnpm
+
+E.g. install the (csv-parse)[https://www.npmjs.com/package/csv-parse] package
+
+```
+pnpm install csv-parse --recursive --filter=backend
+```
+
+Example for installing a dev dependency
+
+```
+pnpm install @types/multer --save-dev --recursive --filter=backend
+```
+
 ## Docker Setup
 
 - The `.env` file of `apps/backend` is not used

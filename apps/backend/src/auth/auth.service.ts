@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { RegisterRequestDto } from './dto/register-request.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
+import { MailService } from '../mail/mail.service';
 
 /*
 const BASE_OPTIONS: SignOptions = {
@@ -20,6 +21,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private mailService: MailService,
   ) {}
 
   async validateUser(username: string, password: string): Promise<User> {
@@ -49,8 +51,14 @@ export class AuthService {
       throw new BadRequestException('username already exists');
     }
     const hashedPassword = await bcrypt.hash(user.password, 10);
-    const newUser: CreateUserDto = { ...user, password: hashedPassword };
-    await this.userService.create(newUser);
+    const newUserDto: CreateUserDto = { ...user, password: hashedPassword };
+    const newUser = await this.userService.create(newUserDto);
+
+    await this.mailService.sendUserConfirmation(
+      newUser,
+      'this-should-be-random',
+    );
+
     return this.login(newUser);
   }
 }

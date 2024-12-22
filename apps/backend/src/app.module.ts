@@ -9,9 +9,10 @@ import { JwtStrategy } from './auth/strategy/jwt.strategy';
 import { JwtGuard } from './auth/utils/jwt.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { TextSnippetModule } from './text-snippet/text-snippet.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormConfig), UserModule, AuthModule, TextSnippetModule],
+  imports: [TypeOrmModule.forRoot(ormConfig), UserModule, AuthModule, TextSnippetModule, MailModule],
   controllers: [AppController],
   providers: [
     AppService,

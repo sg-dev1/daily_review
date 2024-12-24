@@ -10,9 +10,10 @@ import { JwtGuard } from './auth/utils/jwt.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { TextSnippetModule } from './text-snippet/text-snippet.module';
 import { MailModule } from './mail/mail.module';
+import { ReviewScheduleModule } from './review-schedule/review-schedule.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormConfig), UserModule, AuthModule, TextSnippetModule, MailModule],
+  imports: [TypeOrmModule.forRoot(ormConfig), UserModule, AuthModule, TextSnippetModule, MailModule, ReviewScheduleModule],
   controllers: [AppController],
   providers: [
     AppService,

@@ -1,0 +1,19 @@
+<h1>Here is your daily review {{name}}!</h1>
+<p>Here a very cool subheading is written :)</p>
+
+{{#each textSnippets}}
+  <div>
+    <h2>{{this.bookTitle}}</h2>
+    <h3>by {{this.bookAuthor}}</h3>
+
+    <p>{{this.text}}</p>
+
+    {{#if this.note}}
+      <p>{{this.note}}</p>
+    {{/if}}
+
+    {{#if this.location}}
+      <p>(Page {{this.location}})</p>
+    {{/if}}
+  </div>
+{{/each}}

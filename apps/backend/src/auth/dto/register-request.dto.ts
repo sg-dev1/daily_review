@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RegisterRequestDtoType } from '@repo/shared';
-import { IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class RegisterRequestDto implements RegisterRequestDtoType {
   @ApiProperty({ required: true })
@@ -13,5 +13,6 @@ export class RegisterRequestDto implements RegisterRequestDtoType {
 
   @ApiProperty({ required: true })
   @IsNotEmpty()
+  @IsEmail()
   email!: string;
 }

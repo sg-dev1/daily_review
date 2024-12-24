@@ -46,6 +46,10 @@ export class TextSnippetService {
     return data;
   }
 
+  async findAllForUser(user: User): Promise<TextSnippet[]> {
+    return await this.textSnippetRepository.findBy({ user: user });
+  }
+
   async update(
     id: number,
     updateTextSnippetDto: UpdateTextSnippetDto,

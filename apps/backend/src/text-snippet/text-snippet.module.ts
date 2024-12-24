@@ -15,6 +15,6 @@ import { MulterModule } from '@nestjs/platform-express';
   ],
   controllers: [TextSnippetController],
   providers: [TextSnippetService],
-  exports: [],
+  exports: [TextSnippetService],
 })
 export class TextSnippetModule {}

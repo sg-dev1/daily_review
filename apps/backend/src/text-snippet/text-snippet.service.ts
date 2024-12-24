@@ -17,7 +17,11 @@ export class TextSnippetService {
     createTextSnippetDto: CreateTextSnippetDto,
     user: User,
   ): Promise<TextSnippet> {
-    const textSnippet = { ...createTextSnippetDto, userId: user.id };
+    const textSnippet = {
+      ...createTextSnippetDto,
+      userId: user.id,
+      reviewCount: 0,
+    };
     const userData = await this.textSnippetRepository.create(textSnippet);
     return this.textSnippetRepository.save(userData);
   }
@@ -29,6 +33,7 @@ export class TextSnippetService {
     const textSnippets = createTextSnippetDtos.map((dto) => ({
       ...dto,
       userId: user.id,
+      reviewCount: 0,
     }));
     const userData = await this.textSnippetRepository.create(textSnippets);
     return this.textSnippetRepository.save(userData);
@@ -50,6 +55,13 @@ export class TextSnippetService {
     return await this.textSnippetRepository.findBy({ user: user });
   }
 
+  async findAllForUserSortedByReviewCount(user: User): Promise<TextSnippet[]> {
+    return await this.textSnippetRepository.find({
+      where: [{ user: user }],
+      order: { reviewCount: 'ASC' },
+    });
+  }
+
   async update(
     id: number,
     updateTextSnippetDto: UpdateTextSnippetDto,
@@ -60,6 +72,10 @@ export class TextSnippetService {
       updateTextSnippetDto,
     );
     return await this.textSnippetRepository.save(textSnippetData);
+  }
+
+  async updateAll(textSnippets: TextSnippet[]) {
+    return await this.textSnippetRepository.save(textSnippets);
   }
 
   async remove(id: number): Promise<TextSnippet> {

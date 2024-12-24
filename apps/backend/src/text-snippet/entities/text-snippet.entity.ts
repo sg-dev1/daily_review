@@ -40,4 +40,7 @@ export class TextSnippet {
   userId: number;
 
   // future: Tags (could be own table)
+
+  @Column()
+  reviewCount: number;
 }

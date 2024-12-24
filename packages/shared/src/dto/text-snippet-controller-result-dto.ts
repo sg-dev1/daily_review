@@ -2,6 +2,7 @@ import { CreateTextSnippetDtoType } from './text-snippet-controller-types';
 
 export interface TextSnippedDto extends CreateTextSnippetDtoType {
   id: number;
+  reviewCount: number;
 }
 
 export interface TextSnippetControllerResult {

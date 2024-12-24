@@ -34,14 +34,27 @@
             - tested using mailtrap.io
       - Sending the review email                                                                                     // in progress
           - TODOs:
-             - proper styling of email                                                                               // TODO
-             - better selection algorithm of review items (not just random)                                          // TODO
+             - proper styling of email                                                                               [done, first version]
+             - better selection algorithm of review items (not just random)                                          [done, first version]
              - configurable                                                                                          // TODO
                 - review interval, e.g. at 8:00 am
                 - number of text snippets to select
+             - start cronjob for a newly registered user                                                             // TODO
+             - handle the case when user has nothing to review/ db is empty                                          // TODO
+               e.g. do not send an email (maybe only log a warning to console)
           - styling of email, e.g. use proper html (analyse readwise mails)                                          // -
           - time interval, e.g. daily at 8:00 AM; instant send for test                                              // -
           - use a (configurable) Gmail account as the sender                                                         // -
               - could use mailtrap however this only allows to send to your own email address
                 (else you need a registered domain)
           - send email to configured email of the user                                                               [done]
+
+   - Review Stategies - Advanced                                                                                     // TODO
+      - e.g. implement a weighting scheme to rank which text snippets shall be sent
+   - Improved styling of review email                                                                                // TODO
+      - e.g. organise snippets in blocks
+      - have a line below title + author (and above the text)
+      - show the "by <author>" in a different color
+      - show the "Page <n>" in a different color (e.g. could use same style as for author)
+      - Instead of "Here a very cool subheading is written :)" just add a line/ separator
+      - heading with version number (optional)

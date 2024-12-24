@@ -1,19 +1,33 @@
-<h1>Here is your daily review {{name}}!</h1>
-<p>Here a very cool subheading is written :)</p>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Daily Review</title>
+    <style>
+      body {font-family: Arial, Helvetica, sans-serif;}
+    </style>
+  </head>
 
-{{#each textSnippets}}
-  <div>
-    <h2>{{this.bookTitle}}</h2>
-    <h3>by {{this.bookAuthor}}</h3>
+  <body>
+    <h1>Here is your daily review {{name}}!</h1>
+    <p>Here a very cool subheading is written :)</p>
 
-    <p>{{this.text}}</p>
+    {{#each textSnippets}}
+      <div>
+        <h2>{{this.bookTitle}}</h2>
+        <h3>by {{this.bookAuthor}}</h3>
 
-    {{#if this.note}}
-      <p>{{this.note}}</p>
-    {{/if}}
+        <p>{{this.text}}</p>
 
-    {{#if this.location}}
-      <p>(Page {{this.location}})</p>
-    {{/if}}
-  </div>
-{{/each}}
+        {{#if this.note}}
+          <p>{{this.note}}</p>
+        {{/if}}
+
+        {{#if this.location}}
+          <p>(Page {{this.location}})</p>
+        {{/if}}
+      </div>
+    {{/each}}
+  </body>
+</html>

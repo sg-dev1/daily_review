@@ -38,8 +38,8 @@ export class ReviewScheduleService {
       }
 
       const seconds = 0;
-      const minutes = 8;
-      const hour = 12; // TODO take this review interval from a user's config
+      const minutes = 0;
+      const hour = 8; // TODO take this review interval from a user's config
       const numTextSnippetsToSelect = 6; // TODO get this from user's config
       // NOTE: This may break if the version of cron in backend (currently 3.2.1) does
       //       not match the version used in @nestjs/schedule (see package.json)

@@ -1,9 +1,17 @@
 {
   "extends": ["//"],
   "tasks": {
-    "orm-generate": {},
-    "migrate": {},
-    "drop": {},
-    "orm-reg": {}
+    "orm-generate": {
+      "cache": false
+    },
+    "migrate": {
+      "cache": false
+    },
+    "drop": {
+      "cache": false
+    },
+    "orm-reg": {
+      "cache": false
+    }
   }
 }

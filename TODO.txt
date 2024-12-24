@@ -30,6 +30,12 @@
       - Update data                      PUT/ PATCH
       - Delete data                      DELETE
   - Send review email to user                                                                                        // TODO
-      - time interval, e.g. daily at 8:00 AM; instant send for test
-      - use a (configurable) Gmail account as the sender
-      - send email to configured email of the user
+      - Basic email sending (e.g. confirm mail after register)                                                       [done]
+            - tested using mailtrap.io
+      - Sending the review email                                                                                     // TODO
+          - styling of email, e.g. use proper html (analyse readwise mails)
+          - time interval, e.g. daily at 8:00 AM; instant send for test
+          - use a (configurable) Gmail account as the sender
+              - could use mailtrap however this only allows to send to your own email address
+                (else you need a registered domain)
+          - send email to configured email of the user

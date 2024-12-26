@@ -49,15 +49,15 @@
                 (else you need a registered domain)
           - send email to configured email of the user                                                               [done]
 
-   - Review Stategies - Advanced                                                                                     // TODO
-      - Make FilterReviewSelectionStrategy configurable, e.g. add to user entity:
+   - Review Stategies - Advanced                                                                                     // in progress
+      - Make FilterReviewSelectionStrategy configurable, e.g. add to user entity:                                    [done]
          - type: AUTHOR or TITLE
          - filter_author: string
          - filter_title: string
          - Always set the matchSubstring and disable case sensitivity (e.g. convert everything to lowercase)
-      - e.g. implement a weighting scheme to rank which text snippets shall be sent
+      - e.g. implement a weighting scheme to rank which text snippets shall be sent                                  // TODO
            e.g. frequency tuning, which title shall appear more often in the review?
-      - highlight recency: bias to selection of older or newer highlights
+      - highlight recency: bias to selection of older or newer highlights                                            // TODO
    - Improved styling of review email                                                                                // TODO
       - e.g. organise snippets in blocks
       - have a line below title + author (and above the text)
@@ -69,3 +69,5 @@
 - build an android app using react native with ocr functionality to add text snippets                                // TODO
 
 - add proper testing: unit/ integration testing                                                                      // TODO
+    - review schedule service, various strategies, testing of output
+      (without sending any email)

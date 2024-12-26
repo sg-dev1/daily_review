@@ -9,6 +9,12 @@ import {
 } from 'typeorm';
 import { TextSnippet } from '../../text-snippet/entities/text-snippet.entity';
 
+export enum FilterReviewSelectionStrategyType {
+  AUTHOR = 'author',
+  TITLE = 'title',
+  BOTH = 'both',
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -31,10 +37,23 @@ export class User {
   password!: string;
 
   @Column()
-  numReviewItemsToSend: number;
+  numReviewItemsToSend!: number;
 
   @Column()
-  reviewFreqAndTime: string;
+  reviewFreqAndTime!: string;
+
+  @Column({
+    type: 'enum',
+    enum: FilterReviewSelectionStrategyType,
+    default: FilterReviewSelectionStrategyType.TITLE,
+  })
+  filterReviewSelectionStrategyType!: FilterReviewSelectionStrategyType;
+
+  @Column({ default: '' })
+  filterReviewStrategyAuthor!: string;
+
+  @Column({ default: '' })
+  filterReviewStrategyTitle!: string;
 
   // ---
   // Relations

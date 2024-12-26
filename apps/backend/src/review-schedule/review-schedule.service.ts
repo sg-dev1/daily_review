@@ -5,10 +5,16 @@ import { UserService } from '../user/user.service';
 import { CronJob } from 'cron';
 import { MailService } from '../mail/mail.service';
 import { RandomReviewSelectionStrategy } from './strategy/random.strategy';
-import { IReviewSelectionStrategy } from './strategy/review-selection.strategy';
+import {
+  IReviewSelectionStrategy,
+  ReviewFilterType,
+} from './strategy/review-selection.strategy';
 import { FilterReviewSelectionStrategy } from './strategy/filter.strategy';
 import { TextSnippet } from '../text-snippet/entities/text-snippet.entity';
-import { User } from '../user/entities/user.entity';
+import {
+  FilterReviewSelectionStrategyType,
+  User,
+} from '../user/entities/user.entity';
 
 // global mapping of review selection strategies
 const reviewSelectionStrategies: { [key: string]: IReviewSelectionStrategy } = {
@@ -61,8 +67,8 @@ export class ReviewScheduleService {
     const numTextSnippetsToSelect = user.numReviewItemsToSend;
     if (this.debugOverwriteConfig) {
       const seconds = 0;
-      const minutes = 40;
-      const hour = 11;
+      const minutes = 8;
+      const hour = 12;
       reviewFreqAndTime = `${seconds} ${minutes} ${hour} * * *`;
     }
 
@@ -97,12 +103,44 @@ export class ReviewScheduleService {
 
       // b) Filter based on a preferred title (could also use author,
       //    could also shuffle result - would destroy the effect of the sort in step (1))
+      let reviewFilter: ReviewFilterType = {};
+      if (
+        user.filterReviewSelectionStrategyType ===
+        FilterReviewSelectionStrategyType.AUTHOR
+      ) {
+        reviewFilter = {
+          author: user.filterReviewStrategyAuthor,
+          matchSubstring: true,
+        };
+      } else if (
+        user.filterReviewSelectionStrategyType ===
+        FilterReviewSelectionStrategyType.TITLE
+      ) {
+        reviewFilter = {
+          title: user.filterReviewStrategyTitle,
+          matchSubstring: true,
+        };
+      } else if (
+        user.filterReviewSelectionStrategyType ===
+        FilterReviewSelectionStrategyType.BOTH
+      ) {
+        reviewFilter = {
+          author: user.filterReviewStrategyAuthor,
+          title: user.filterReviewStrategyTitle,
+          matchSubstring: true,
+        };
+      }
+
+      if (this.debugOverwriteConfig) {
+        reviewFilter = {
+          title: 'How to Talk to Anyone',
+          matchSubstring: true,
+        };
+      }
+
       const reviewsToSend: TextSnippet[] = reviewSelectionStrategies[
         FilterReviewSelectionStrategy.name
-      ].selectReviews(textSnippets, numTextSnippetsToSelect, {
-        title: 'How to Talk to Anyone',
-        matchSubstring: true,
-      });
+      ].selectReviews(textSnippets, numTextSnippetsToSelect, reviewFilter);
 
       if (reviewsToSend.length === 0) {
         console.warn(

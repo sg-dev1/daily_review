@@ -15,21 +15,27 @@ export class FilterReviewSelectionStrategy implements IReviewSelectionStrategy {
     let result: TextSnippet[] = input;
 
     if (filter.author !== undefined) {
-      result = result.filter(
-        (value: TextSnippet) =>
-          value.bookAuthor === filter.author ||
+      const filterAuthorLowercase = filter.author.toLowerCase();
+      result = result.filter((value: TextSnippet) => {
+        const bookAuthorLowercase = value.bookAuthor.toLowerCase();
+        return (
+          bookAuthorLowercase === filterAuthorLowercase ||
           (filter.matchSubstring &&
-            value.bookAuthor.indexOf(filter.author as string) !== -1),
-      );
+            bookAuthorLowercase.indexOf(filterAuthorLowercase) !== -1)
+        );
+      });
     }
 
     if (filter.title !== undefined) {
-      result = result.filter(
-        (value: TextSnippet) =>
-          value.bookTitle === filter.title ||
+      const filterTitleLowercase = filter.title.toLowerCase();
+      result = result.filter((value: TextSnippet) => {
+        const bookTitleLowercase = value.bookTitle.toLowerCase();
+        return (
+          bookTitleLowercase === filterTitleLowercase ||
           (filter.matchSubstring &&
-            value.bookTitle.indexOf(filter.title as string) !== -1),
-      );
+            bookTitleLowercase.indexOf(filterTitleLowercase) !== -1)
+        );
+      });
     }
 
     if (filter.randomShuffleResult) {

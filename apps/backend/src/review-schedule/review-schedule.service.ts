@@ -25,7 +25,7 @@ const reviewSelectionStrategies: { [key: string]: IReviewSelectionStrategy } = {
 @Injectable()
 export class ReviewScheduleService {
   private debug = true;
-  private debugOverwriteConfig = true;
+  private debugOverwriteConfig = process.env.NODE_ENV === 'development';
 
   constructor(
     private schedulerRegistry: SchedulerRegistry,
@@ -67,7 +67,7 @@ export class ReviewScheduleService {
     const numTextSnippetsToSelect = user.numReviewItemsToSend;
     if (this.debugOverwriteConfig) {
       const seconds = 0;
-      const minutes = 8;
+      const minutes = 13;
       const hour = 12;
       reviewFreqAndTime = `${seconds} ${minutes} ${hour} * * *`;
     }

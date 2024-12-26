@@ -19,6 +19,7 @@ const reviewSelectionStrategies: { [key: string]: IReviewSelectionStrategy } = {
 @Injectable()
 export class ReviewScheduleService {
   private debug = true;
+  private debugOverwriteConfig = true;
 
   constructor(
     private schedulerRegistry: SchedulerRegistry,
@@ -29,13 +30,15 @@ export class ReviewScheduleService {
 
   // Setup all review cron jobs 1 sec after application startup
   @Timeout(1000)
-  async onStartup() {
+  async onStartup(): Promise<void> {
     await this.setup();
   }
 
   // "0 30 11 * * 1-5"  --> Monday to Friday at 11:30am
   // "0 0 8 * * *"      --> Every day at 8:00am
-  private async setup() {
+  // "0 0 8 */2 * *"    --> Every second day at 8:00am (https://serverfault.com/a/204267)
+  // "0 0 8 * * 0"      --> Every Sunday at 8:00am (https://crontab.guru/once-a-week)
+  private async setup(): Promise<void> {
     if (this.debug) {
       console.log('Initial setup reviews');
     }
@@ -49,20 +52,25 @@ export class ReviewScheduleService {
     }
   }
 
-  public addNewUserForReview(user: User) {
+  public addNewUserForReview(user: User): void {
     if (this.debug) {
       console.log('Setup review for user', user.username);
     }
 
-    const seconds = 0;
-    const minutes = 20;
-    const hour = 10; // TODO take this review interval from a user's config
-    const numTextSnippetsToSelect = 6; // TODO get this from user's config
+    let reviewFreqAndTime = user.reviewFreqAndTime;
+    const numTextSnippetsToSelect = user.numReviewItemsToSend;
+    if (this.debugOverwriteConfig) {
+      const seconds = 0;
+      const minutes = 40;
+      const hour = 11;
+      reviewFreqAndTime = `${seconds} ${minutes} ${hour} * * *`;
+    }
+
     // NOTE: This may break if the version of cron in backend (currently 3.2.1) does
     //       not match the version used in @nestjs/schedule (see package.json)
     //       Seems that you need to install cron package (in correct version) to get the
     //       CronJob type ...
-    const job = new CronJob(`${seconds} ${minutes} ${hour} * * *`, async () => {
+    const job = new CronJob(reviewFreqAndTime, async () => {
       // 0) Check if user still exists in db (e.g. was it deleted in between)?
       const checkedUser = this.userService.findOneByUsername(user.username);
       if (checkedUser === null) {
@@ -128,7 +136,7 @@ export class ReviewScheduleService {
     job.start();
   }
 
-  removeUserFromReview(user: User) {
+  removeUserFromReview(user: User): void {
     // delete cronjobs with SchedulerRegistry#deleteCronJob
     this.schedulerRegistry.deleteCronJob(user.username);
   }

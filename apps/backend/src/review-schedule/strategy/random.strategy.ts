@@ -10,6 +10,7 @@ export class RandomReviewSelectionStrategy implements IReviewSelectionStrategy {
   selectReviews(
     input: TextSnippet[],
     n: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     filter: ReviewFilterType,
   ): TextSnippet[] {
     const shuffled = Array.from(input).sort(() => 0.5 - Math.random());

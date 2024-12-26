@@ -32,11 +32,11 @@
   - Send review email to user                                                                                        // -
       - Basic email sending (e.g. confirm mail after register)                                                       [done]
             - tested using mailtrap.io
-      - Sending the review email                                                                                     // in progress
+      - Sending the review email                                                                                     [done]
           - TODOs:
              - proper styling of email                                                                               [done, first version]
              - better selection algorithm of review items (not just random)                                          [done, first version]
-             - configurable                                                                                          // TODO
+             - configurable                                                                                          [done]
                 - review interval, e.g. at 8:00 am
                 - number of text snippets to select
              - start cronjob for a newly registered user                                                             [done]
@@ -50,7 +50,14 @@
           - send email to configured email of the user                                                               [done]
 
    - Review Stategies - Advanced                                                                                     // TODO
+      - Make FilterReviewSelectionStrategy configurable, e.g. add to user entity:
+         - type: AUTHOR or TITLE
+         - filter_author: string
+         - filter_title: string
+         - Always set the matchSubstring and disable case sensitivity (e.g. convert everything to lowercase)
       - e.g. implement a weighting scheme to rank which text snippets shall be sent
+           e.g. frequency tuning, which title shall appear more often in the review?
+      - highlight recency: bias to selection of older or newer highlights
    - Improved styling of review email                                                                                // TODO
       - e.g. organise snippets in blocks
       - have a line below title + author (and above the text)
@@ -58,3 +65,7 @@
       - show the "Page <n>" in a different color (e.g. could use same style as for author)
       - Instead of "Here a very cool subheading is written :)" just add a line/ separator
       - heading with version number (optional)
+
+- build an android app using react native with ocr functionality to add text snippets                                // TODO
+
+- add proper testing: unit/ integration testing                                                                      // TODO

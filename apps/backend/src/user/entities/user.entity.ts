@@ -30,6 +30,12 @@ export class User {
   })
   password!: string;
 
+  @Column()
+  numReviewItemsToSend: number;
+
+  @Column()
+  reviewFreqAndTime: string;
+
   // ---
   // Relations
 

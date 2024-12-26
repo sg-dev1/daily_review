@@ -74,7 +74,7 @@ export class TextSnippetService {
     return await this.textSnippetRepository.save(textSnippetData);
   }
 
-  async updateAll(textSnippets: TextSnippet[]) {
+  async updateAll(textSnippets: TextSnippet[]): Promise<TextSnippet[]> {
     return await this.textSnippetRepository.save(textSnippets);
   }
 

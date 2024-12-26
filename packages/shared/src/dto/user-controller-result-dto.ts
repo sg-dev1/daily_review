@@ -2,6 +2,9 @@ import { CreateUserDtoType } from './user-controller-types';
 
 export interface UserDto extends CreateUserDtoType {
   id: number;
+
+  numReviewItemsToSend: number;
+  reviewFreqAndTime: string;
 }
 
 export interface UserControllerResult {

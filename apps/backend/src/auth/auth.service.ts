@@ -8,6 +8,7 @@ import { RegisterRequestDto } from './dto/register-request.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { MailService } from '../mail/mail.service';
+import { ReviewScheduleService } from '../review-schedule/review-schedule.service';
 
 /*
 const BASE_OPTIONS: SignOptions = {
@@ -22,6 +23,7 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
     private mailService: MailService,
+    private reviewScheduleService: ReviewScheduleService,
   ) {}
 
   async validateUser(username: string, password: string): Promise<User> {
@@ -58,6 +60,8 @@ export class AuthService {
       newUser,
       'this-should-be-random',
     );
+
+    this.reviewScheduleService.addNewUserForReview(newUser);
 
     return this.login(newUser);
   }

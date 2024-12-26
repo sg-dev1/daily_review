@@ -13,5 +13,6 @@ import { ScheduleModule } from '@nestjs/schedule';
     ScheduleModule.forRoot(),
   ],
   providers: [ReviewScheduleService],
+  exports: [ReviewScheduleService],
 })
 export class ReviewScheduleModule {}

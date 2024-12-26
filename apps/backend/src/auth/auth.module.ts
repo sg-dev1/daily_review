@@ -5,6 +5,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from 'src/user/user.module';
 import { MailModule } from '../mail/mail.module';
+import { ReviewScheduleModule } from '../review-schedule/review-schedule.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MailModule } from '../mail/mail.module';
       }),
     }),
     MailModule,
+    ReviewScheduleModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

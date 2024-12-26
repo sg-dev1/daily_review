@@ -39,8 +39,8 @@
              - configurable                                                                                          // TODO
                 - review interval, e.g. at 8:00 am
                 - number of text snippets to select
-             - start cronjob for a newly registered user                                                             // TODO
-             - handle the case when user has nothing to review/ db is empty                                          // TODO
+             - start cronjob for a newly registered user                                                             [done]
+             - handle the case when user has nothing to review/ db is empty                                          [done]
                e.g. do not send an email (maybe only log a warning to console)
           - styling of email, e.g. use proper html (analyse readwise mails)                                          // -
           - time interval, e.g. daily at 8:00 AM; instant send for test                                              // -

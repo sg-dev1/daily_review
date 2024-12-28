@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserLoginDto } from './dto/user-login.dto';
-import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { RegisterRequestDto } from './dto/register-request.dto';
@@ -9,6 +8,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { MailService } from '../mail/mail.service';
 import { ReviewScheduleService } from '../review-schedule/review-schedule.service';
+import { UserService } from '../user/user.service';
 
 /*
 const BASE_OPTIONS: SignOptions = {

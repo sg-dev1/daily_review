@@ -133,7 +133,8 @@ export class ReviewScheduleService {
 
       if (this.debugOverwriteConfig) {
         reviewFilter = {
-          title: 'How to Talk to Anyone',
+          title:
+            'How to Talk to Anyone|How To Win Friends and Influence People',
           matchSubstring: true,
         };
       }

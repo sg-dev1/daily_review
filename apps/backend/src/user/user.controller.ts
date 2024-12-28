@@ -17,7 +17,7 @@ import {
   UserControllerResultWithSingleData,
   UserDto,
 } from '@repo/shared';
-import { checkedHttpException } from 'src/utils/checkedHttpException';
+import { checkedHttpException } from '../utils/checkedHttpException';
 
 @Controller('users') //route group
 export class UserController {

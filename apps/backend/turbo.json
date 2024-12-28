@@ -12,6 +12,7 @@
     },
     "orm-reg": {
       "cache": false
-    }
+    },
+    "test": {}
   }
 }

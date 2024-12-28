@@ -12,15 +12,12 @@ import {
 import { TextSnippetService } from './text-snippet.service';
 import { CreateTextSnippetDto } from './dto/create-text-snippet.dto';
 import { UpdateTextSnippetDto } from './dto/update-text-snippet.dto';
-import { checkedHttpException } from 'src/utils/checkedHttpException';
 import {
   TextSnippetControllerResult,
   TextSnippetControllerResultWithData,
   TextSnippetControllerResultWithSingleData,
 } from '@repo/shared';
 import { TextSnippet } from './entities/text-snippet.entity';
-import { GetUser } from 'src/auth/utils/get-user.decorator';
-import { User } from 'src/user/entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { csvFileFilter, csvFileName } from '../utils/fileUploadUtils';
@@ -32,6 +29,9 @@ import {
 } from './dto/texsnippet-upload.dto';
 import { parse } from 'csv-parse';
 import * as fs from 'fs';
+import { checkedHttpException } from '../utils/checkedHttpException';
+import { GetUser } from '../auth/utils/get-user.decorator';
+import { User } from '../user/entities/user.entity';
 
 @Controller('text-snippet')
 export class TextSnippetController {

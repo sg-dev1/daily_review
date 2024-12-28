@@ -7,6 +7,38 @@ import {
 export class FilterReviewSelectionStrategy implements IReviewSelectionStrategy {
   readonly name: string = 'FilterReviewSelectionStrategy';
 
+  private genericFilter(
+    input: TextSnippet[],
+    filterText: string,
+    propertyToFilter: string,
+    filter: ReviewFilterType,
+  ): TextSnippet[] {
+    const filterTextLowercase = filterText.toLowerCase();
+    const filterList: string[] = filterTextLowercase.split('|');
+
+    return input.filter((value: TextSnippet) => {
+      const filterProperty = (value as any)[propertyToFilter];
+
+      if (filterProperty === undefined) {
+        throw new Error(
+          `Filter property '${filterProperty}' could not be found on type TextSnippet`,
+        );
+      }
+
+      const filterPropertyLowercase = filterProperty.toLowerCase();
+      return (
+        filterList.includes(filterPropertyLowercase) ||
+        (filter.matchSubstring &&
+          filterList
+            .map(
+              (filterItem) =>
+                filterPropertyLowercase.indexOf(filterItem) !== -1,
+            )
+            .reduce((prev, current) => prev || current))
+      );
+    });
+  }
+
   selectReviews(
     input: TextSnippet[],
     n: number,
@@ -15,27 +47,11 @@ export class FilterReviewSelectionStrategy implements IReviewSelectionStrategy {
     let result: TextSnippet[] = input;
 
     if (filter.author !== undefined) {
-      const filterAuthorLowercase = filter.author.toLowerCase();
-      result = result.filter((value: TextSnippet) => {
-        const bookAuthorLowercase = value.bookAuthor.toLowerCase();
-        return (
-          bookAuthorLowercase === filterAuthorLowercase ||
-          (filter.matchSubstring &&
-            bookAuthorLowercase.indexOf(filterAuthorLowercase) !== -1)
-        );
-      });
+      result = this.genericFilter(result, filter.author, 'bookAuthor', filter);
     }
 
     if (filter.title !== undefined) {
-      const filterTitleLowercase = filter.title.toLowerCase();
-      result = result.filter((value: TextSnippet) => {
-        const bookTitleLowercase = value.bookTitle.toLowerCase();
-        return (
-          bookTitleLowercase === filterTitleLowercase ||
-          (filter.matchSubstring &&
-            bookTitleLowercase.indexOf(filterTitleLowercase) !== -1)
-        );
-      });
+      result = this.genericFilter(result, filter.title, 'bookTitle', filter);
     }
 
     if (filter.randomShuffleResult) {

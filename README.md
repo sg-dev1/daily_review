@@ -68,6 +68,12 @@ Run linter on all projects
 turbo lint
 ```
 
+Run the test cases for the backend (currently only backend is supported)
+
+```
+turbo test
+```
+
 ### Development database start/stop (within docker)
 
 These commands are defined in the top level package.json scripts:

@@ -1,3 +1,11 @@
+MVP Top priorities:
+  - Test production setup (see how it performs when it is sending mails, e.g. possible to deploy to Raspberry Pi?)
+  - Build Android App (for proper data input)
+
+
+----
+(here below are still some todo tasks)
+
 - Improve config of backend, e.g. to use base config from typescript-config                                          [done]
    - fix all linter warnings of backend first
 - Add a shared library project for shared code between frontend and backend (e.g. dtos)                              [done]
@@ -68,6 +76,10 @@
 
 - build an android app using react native with ocr functionality to add text snippets                                // TODO
 
-- add proper testing: unit/ integration testing                                                                      // TODO
+- add proper testing: unit/ integration testing                                                                      // in progress
+    - simple tests created for FilterReviewSelectionStrategy
+    - main issues:
+        (1) handling of test data
+        (2) dependency injection (current solution is to not use it), mocking all db access would be a lot of work
     - review schedule service, various strategies, testing of output
       (without sending any email)

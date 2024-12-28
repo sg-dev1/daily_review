@@ -169,6 +169,12 @@ docker compose build
 
 ### Run the docker containers
 
+Stop the postgres docker container (docker-compose-local-db.yml) before starting the docker deployment:
+
+```
+pnpm db:down
+```
+
 Run the following:
 
 ```

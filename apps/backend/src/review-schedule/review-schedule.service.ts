@@ -25,7 +25,7 @@ const reviewSelectionStrategies: { [key: string]: IReviewSelectionStrategy } = {
 @Injectable()
 export class ReviewScheduleService {
   private debug = true;
-  private debugOverwriteConfig = process.env.NODE_ENV === 'development';
+  private debugOverwriteConfig = false; //process.env.NODE_ENV === 'development';
 
   constructor(
     private schedulerRegistry: SchedulerRegistry,

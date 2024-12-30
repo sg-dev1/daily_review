@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf node_modules
 rm -rf apps/backend/node_modules/
 rm -rf apps/docs/node_modules/
 rm -rf apps/frontend/node_modules/

@@ -164,7 +164,7 @@ pnpm install @types/multer --save-dev --recursive --filter=backend
 Run the following:
 
 ```
-docker compose build
+docker compose -f ./docker-compose.dev.yml build
 ```
 
 ### Run the docker containers
@@ -178,7 +178,7 @@ pnpm db:down
 Run the following:
 
 ```
-docker compose up -d
+docker compose -f ./docker-compose.dev.yml up -d
 ```
 
 Now go into a browser at http://localhost (or https://localhost), you will be forwarded to the https site,

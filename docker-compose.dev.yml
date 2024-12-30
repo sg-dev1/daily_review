@@ -1,0 +1,61 @@
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - config/backend_dev.env
+    # Expose port in development setup (e.g. to access Swagger UI)
+    ports:
+      - 7777:7777
+    depends_on:
+      - database
+
+  database:
+    container_name: database
+    #image: my-database
+    image: postgres:16.5-alpine3.20
+    env_file:
+      - config/db_dev.env
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    #environment:
+    #  POSTGRES_USER: 'postgres'
+    #  POSTGRES_PASSWORD: '123'
+    #POSTGRES_PASSWORD: ${DB_PASSWORD}
+    #POSTGRES_USER: ${DB_USERNAME}
+    #POSTGRES_DB: ${DB_DATABASE_NAME}
+    #PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+
+  rproxy:
+    container_name: rproxy
+    build:
+      context: .
+      dockerfile: ./apps/reverse-proxy/Dockerfile
+    #image: rproxy
+    #image: nginx:1.27.2-alpine3.20
+    # TODO need to create config (certificates)
+    restart: unless-stopped
+    volumes:
+      - ./apps/reverse-proxy/ssl:/etc/nginx/ssl
+    ports:
+      - 80:80
+      - 443:443
+
+volumes:
+  db_volume:
+    name: db_volume

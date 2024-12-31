@@ -21,6 +21,8 @@ async function bootstrap(): Promise<void> {
     credentials: true,
   });
 
+  app.setGlobalPrefix('api');
+
   if (process.env.NODE_ENV === 'development') {
     // Swagger
     const swaggerConfig = new DocumentBuilder()
@@ -28,6 +30,7 @@ async function bootstrap(): Promise<void> {
       .setDescription('This is the description of my app')
       .setVersion('0.1')
       .addBearerAuth()
+      //.setBasePath('api')
       .build();
     const customOptions: SwaggerCustomOptions = {
       swaggerOptions: {

@@ -1,6 +1,26 @@
 MVP Top priorities:
   - Test production setup (see how it performs when it is sending mails, e.g. possible to deploy to Raspberry Pi?)
+     - Raspberry Pi deployement did not work, so use Raspberry Pi 3
+     - Still some security issues:                                                                                               // TODO
+        - Certificates for reverse proxy are committed to git (should have a private folder)
+        - Could even check out if using Let's encrypt would be an option to get rid of certificate warnings
+      - Fixed issues:  
+        - All passwords, JWT keys are already savely stored as Device Variables in balena dashboard
+        - Disabled all unneeded ports an only expose port 80 and 443 of reverse proxy (80 is forwarded to secure 443 - https)
+     - Test everything when deployed                                                                                             // done
+        - Swagger reachable and possible to send commands       yes
+        - Frontend reachable                                    yes
+        - Frontend can reach backend (e.g. test login)          no --> see bug
+        - Backend is reachable, e.g. https://<ip>/api           yes
+             - wget --no-check-certificate https://192.168.1.194/api 
+               was successfull, but internal links (e.g. to scripts) are not forwarded properly, e.g. ./api-docs/swagger-ui.css
+                  is resolved to https://<ip>/api-docs/api-docs/swagger-ui.css (maybe the updated default.conf for the reverse proxy helps)
+     - Fix bug in frontend: uses a hardcoded localhost to access backend                                                         // TODO
+     - Fix bug in backend - users endpoint                                                                                       // TODO
+         updated user (changed username and password and no longer could login)
+     - Add pihole service                                                                                                        // TODO
   - Build Android App (for proper data input)
+  
 
 
 ----

@@ -1,13 +1,12 @@
 version: '2'
 services:
-  # frontend:
-  #   container_name: frontend
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/frontend/Dockerfile
-  #   restart: unless-stopped
-  #   ports:
-  #     - 3000:3000
+  frontend:
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
+    restart: unless-stopped
+    #ports:
+    #  - 3000:3000
 
   backend:
     build:
@@ -18,7 +17,6 @@ services:
       - DB_HOST=database
       - DB_PORT=5432
       - DB_USER=postgres
-      - DB_PASSWORD=123
       - DB_DATABASE=my_database
       - PORT=7777
       - NODE_ENV=development
@@ -26,46 +24,37 @@ services:
       - NODE_DB_DROP=true
       # To generate a strong secret, you can run the following command in your terminal:
       # node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
-      - JWT_SECRET=secret
+      #- JWT_SECRET=secret
       - JWT_EXPERIRES_IN=1d
-      # mail
-      - MAIL_HOST=live.smtp.mailtrap.io
-      - MAIL_USER=api
-      - MAIL_PASSWORD=cf26ba69a1b4791549120e211e3c9e70
-      - MAIL_FROM=hello@demomailtrap.com
     # Expose port in development setup (e.g. to access Swagger UI)
-    ports:
-      - 7777:7777
+    #ports:
+    #  - 7777:7777
     depends_on:
       - database
 
   database:
-    #image: my-database
     image: postgres:16.5-alpine3.20
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123
       - POSTGRES_DB=my_database
     restart: unless-stopped
-    ports:
-      - 5432:5432
+    #ports:
+    #  - 5432:5432
     volumes:
       - db_volume:/var/lib/postgresql/data
 
-  # rproxy:
-  #   container_name: rproxy
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/reverse-proxy/Dockerfile
-  #   #image: rproxy
-  #   #image: nginx:1.27.2-alpine3.20
-  #   # TODO need to create config (certificates)
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./apps/reverse-proxy/ssl:/etc/nginx/ssl
-  #   ports:
-  #     - 80:80
-  #     - 443:443
+  rproxy:
+    build:
+      context: .
+      dockerfile: ./apps/reverse-proxy/Dockerfile.rp3
+    #image: rproxy
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - frontend
+      - backend
 
 volumes:
   db_volume:

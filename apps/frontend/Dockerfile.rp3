@@ -1,4 +1,7 @@
+# Based on https://github.com/vercel/turborepo/blob/main/examples/with-docker/apps/web/Dockerfile
+# but use balenalib baseimage for raspberry pi
 FROM balenalib/raspberrypi3-64-alpine-node:3.14-build AS base
+
 
 FROM base AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -9,7 +12,7 @@ WORKDIR /app
 RUN npm install turbo --global
 
 COPY . .
-RUN turbo prune backend --docker
+RUN turbo prune frontend --docker
 
 
 # Add lockfile and package.json's of isolated subworkspace
@@ -44,12 +47,13 @@ WORKDIR /app
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nestjs
+RUN adduser --system --uid 1001 nextjs
+USER nextjs
 
-# Create uploads directory and set permissions
-RUN mkdir -p /app/uploads && chown -R nestjs:nodejs /app/uploads
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=installer --chown=nextjs:nodejs /app/apps/frontend/.next/standalone ./
+COPY --from=installer --chown=nextjs:nodejs /app/apps/frontend/.next/static ./apps/frontend/.next/static
+COPY --from=installer --chown=nextjs:nodejs /app/apps/frontend/public ./apps/frontend/public
 
-USER nestjs
-COPY --from=installer /app .
-
-CMD node apps/backend/dist/main.js
+CMD node apps/frontend/server.js

@@ -15,7 +15,7 @@ MVP Top priorities:
              - wget --no-check-certificate https://192.168.1.194/api 
                was successfull, but internal links (e.g. to scripts) are not forwarded properly, e.g. ./api-docs/swagger-ui.css
                   is resolved to https://<ip>/api-docs/api-docs/swagger-ui.css (maybe the updated default.conf for the reverse proxy helps)
-     - Fix bug in frontend: uses a hardcoded localhost to access backend                                                         // TODO
+     - Fix bug in frontend: uses a hardcoded localhost to access backend                                                         // done
      - Fix bug in backend - users endpoint                                                                                       // done
          updated user (changed username and password and no longer could login)
      - Add pihole service                                                                                                        // TODO
@@ -26,9 +26,12 @@ Additional Bugs/ Improvements
 - /api/users/{id} does not show all available properties, e.g. filterReviewSelectionStrategyType                                 // done
    --> "property filterReviewStrategyTitle should not exist"
    // not yet working at all
-
 - Get rid of need for running ./prepare_balena.sh - e.g. supply proper .dockerignore files in apps directories                   // done
 
+- Further security issues:                                                                                                       // TODO
+  - Everyone can register a new user
+  - This user has unlimited rights, e.g. he can delete existing ones
+  - These issue need to be fixed before exposing the app to the public internet
 
 ----
 (here below are still some todo tasks)

@@ -3,8 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { UserLoginDtoType } from '@repo/shared';
-import axios from 'axios';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -12,19 +10,12 @@ import { Input } from '@/components/ui/input';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import ErrorAlert from './alerts/ErrorAlert';
+import { postLogin } from '../lib/api-client';
 
 const loginFormSchema = z.object({
   username: z.string().min(2).max(50),
   password: z.string().min(2).max(50),
 });
-
-// TODO move this into some "api-client" module
-const postLogin = async (data: UserLoginDtoType) => {
-  // TODO - need to make this configurable
-  const response = await axios.post('http://localhost:7777/auth/login', data);
-  console.log('postLogin response', response);
-  return response;
-};
 
 const LoginForm = () => {
   const [errorText, setErrorText] = useState('');

@@ -5,6 +5,8 @@ services:
       context: .
       dockerfile: ./apps/frontend/Dockerfile
     restart: unless-stopped
+    environment:
+      - API_BASE_URL=http://backend:7777/api/
     #ports:
     #  - 3000:3000
 

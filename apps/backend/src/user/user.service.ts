@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -13,11 +14,14 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const userData = await this.userRepository.create({
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    const newUserDto = {
       ...createUserDto,
+      password: hashedPassword,
       numReviewItemsToSend: 6,
       reviewFreqAndTime: '0 0 8 * * *',
-    });
+    };
+    const userData = await this.userRepository.create(newUserDto);
     return this.userRepository.save(userData);
   }
 
@@ -50,7 +54,17 @@ export class UserService {
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const existingUser = await this.findOne(id);
-    const userData = this.userRepository.merge(existingUser, updateUserDto);
+
+    let newUpdateUserDto = updateUserDto;
+    if (updateUserDto.password) {
+      const hashedPassword = await bcrypt.hash(updateUserDto.password, 10);
+      newUpdateUserDto = {
+        ...updateUserDto,
+        password: hashedPassword,
+      };
+    }
+
+    const userData = this.userRepository.merge(existingUser, newUpdateUserDto);
     return await this.userRepository.save(userData);
   }
 

@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# NOTE: This script no longer needs to be run thanks to the .dockerignore file escluding all these folders
+#       from the build.
+#
 rm -rf node_modules
 rm -rf apps/backend/node_modules/
 rm -rf apps/docs/node_modules/

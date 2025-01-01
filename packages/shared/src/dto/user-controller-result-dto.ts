@@ -5,6 +5,10 @@ export interface UserDto extends CreateUserDtoType {
 
   numReviewItemsToSend: number;
   reviewFreqAndTime: string;
+
+  filterReviewSelectionStrategyType: string; // FilterReviewSelectionStrategyType
+  filterReviewStrategyAuthor: string;
+  filterReviewStrategyTitle: string;
 }
 
 export interface UserControllerResult {

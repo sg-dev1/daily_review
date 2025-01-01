@@ -1,3 +1,28 @@
 node_modules
 out
 .turbo
+# backend
+apps/backend/node_modules
+apps/backend/.turbo
+apps/backend/dist
+apps/backend/uploads
+# frontend
+apps/frontend/node_modules
+apps/frontend/.turbo
+apps/frontend/.next
+# shared
+packages/shared/node_modules
+packages/shared/.turbo
+# eslint-config
+packages/eslint-config/node_modules
+# ui
+packages/ui/node_modules
+packages/ui/.turbo
+# web
+apps/web/node_modules
+apps/web/.turbo
+apps/web/.next
+# docs
+apps/docs/node_modules
+apps/docs/.turbo
+apps/docs/.next

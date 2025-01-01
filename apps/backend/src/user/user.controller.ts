@@ -29,7 +29,6 @@ export class UserController {
   ): Promise<UserControllerResult> {
     try {
       await this.userService.create(createUserDto);
-
       return {
         success: true,
         message: 'User Created Successfully',
@@ -46,6 +45,7 @@ export class UserController {
   async findAll(): Promise<UserControllerResultWithData> {
     try {
       const data: User[] = await this.userService.findAll();
+      //console.log('Found users: ', data);
       const dataAsDto: UserDto[] = data.map((entity: User) =>
         entity.toSanitizedDto(),
       );

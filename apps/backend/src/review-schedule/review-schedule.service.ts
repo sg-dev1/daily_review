@@ -78,7 +78,9 @@ export class ReviewScheduleService {
     //       CronJob type ...
     const job = new CronJob(reviewFreqAndTime, async () => {
       // 0) Check if user still exists in db (e.g. was it deleted in between)?
-      const checkedUser = this.userService.findOneByUsername(user.username);
+      const checkedUser = await this.userService.findOneByUsername(
+        user.username,
+      );
       if (checkedUser === null) {
         if (this.debug) {
           console.log(
@@ -91,9 +93,14 @@ export class ReviewScheduleService {
         return;
       }
 
+      // user the user fetched from db
+      const userFromDb = checkedUser as User;
+
       // 1) Get all text snippets of a user sorted ascending by review count
       const textSnippets =
-        await this.textSnippetService.findAllForUserSortedByReviewCount(user);
+        await this.textSnippetService.findAllForUserSortedByReviewCount(
+          userFromDb,
+        );
 
       // 2) Apply the selection algorithm
       // a) Most basic random strategy
@@ -105,28 +112,28 @@ export class ReviewScheduleService {
       //    could also shuffle result - would destroy the effect of the sort in step (1))
       let reviewFilter: ReviewFilterType = {};
       if (
-        user.filterReviewSelectionStrategyType ===
+        userFromDb.filterReviewSelectionStrategyType ===
         FilterReviewSelectionStrategyType.AUTHOR
       ) {
         reviewFilter = {
-          author: user.filterReviewStrategyAuthor,
+          author: userFromDb.filterReviewStrategyAuthor,
           matchSubstring: true,
         };
       } else if (
-        user.filterReviewSelectionStrategyType ===
+        userFromDb.filterReviewSelectionStrategyType ===
         FilterReviewSelectionStrategyType.TITLE
       ) {
         reviewFilter = {
-          title: user.filterReviewStrategyTitle,
+          title: userFromDb.filterReviewStrategyTitle,
           matchSubstring: true,
         };
       } else if (
-        user.filterReviewSelectionStrategyType ===
+        userFromDb.filterReviewSelectionStrategyType ===
         FilterReviewSelectionStrategyType.BOTH
       ) {
         reviewFilter = {
-          author: user.filterReviewStrategyAuthor,
-          title: user.filterReviewStrategyTitle,
+          author: userFromDb.filterReviewStrategyAuthor,
+          title: userFromDb.filterReviewStrategyTitle,
           matchSubstring: true,
         };
       }
@@ -146,6 +153,14 @@ export class ReviewScheduleService {
       if (reviewsToSend.length === 0) {
         console.warn(
           'No reviews to send could be found. Do not send a review email.',
+        );
+        console.info(
+          'reviewFilter=',
+          reviewFilter,
+          ', numTextSnippetsToSelect=',
+          numTextSnippetsToSelect,
+          'textSnippets.length=',
+          textSnippets.length,
         );
         return;
       }
@@ -172,6 +187,11 @@ export class ReviewScheduleService {
     });
 
     this.schedulerRegistry.addCronJob(user.username, job);
+    this.userService.addSubscriber(user, async (userObj: User) => {
+      this.removeUserFromReview(userObj);
+      this.addNewUserForReview(userObj);
+    });
+
     job.start();
   }
 

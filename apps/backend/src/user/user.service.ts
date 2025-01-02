@@ -8,6 +8,8 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
+  private readonly subscribers: { [key: number]: (user: User) => void } = {};
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -65,11 +67,22 @@ export class UserService {
     }
 
     const userData = this.userRepository.merge(existingUser, newUpdateUserDto);
-    return await this.userRepository.save(userData);
+    const updatedUser = await this.userRepository.save(userData);
+
+    const cb = this.subscribers[updatedUser.id];
+    if (cb !== undefined) {
+      cb(updatedUser);
+    }
+
+    return updatedUser;
   }
 
   async remove(id: number): Promise<User> {
     const existingUser = await this.findOne(id);
     return await this.userRepository.remove(existingUser);
+  }
+
+  addSubscriber(user: User, cb: (user: User) => void) {
+    this.subscribers[user.id] = cb;
   }
 }

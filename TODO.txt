@@ -1,9 +1,22 @@
 MVP Top priorities:
+  - Build Android App (for proper data input)                                                                                    // TODO
+  - Fix security issues:                                                                                                         // TODO
+      - Everyone can register a new user
+         - make authorization for register endpoint mandatory
+         - create default user admin (password: admin) when (users) database is empty
+         - only admin user allowed to create new users --> could remove register endpoint completely
+         - only admin is allowed to edit data of other users
+         - normal users are only allowed to edit their data (e.g. a normal user cannot edit other's data - incl. settings or text snippets)
+      - This user has unlimited rights, e.g. he can delete existing ones
+         - add role based access control (admin vs normal user)
+      - These issue need to be fixed before exposing the app to the public internet
+      - Certificates for reverse proxy are committed to git 
+        - Should have a private folder excluded from git
+        - Could even check out if using Let's encrypt would be an option to get rid of certificate warnings
+
+
   - Test production setup (see how it performs when it is sending mails, e.g. possible to deploy to Raspberry Pi?)
      - Raspberry Pi deployement did not work, so use Raspberry Pi 3
-     - Still some security issues:                                                                                               // TODO
-        - Certificates for reverse proxy are committed to git (should have a private folder)
-        - Could even check out if using Let's encrypt would be an option to get rid of certificate warnings
       - Fixed issues:  
         - All passwords, JWT keys are already savely stored as Device Variables in balena dashboard
         - Disabled all unneeded ports an only expose port 80 and 443 of reverse proxy (80 is forwarded to secure 443 - https)
@@ -18,9 +31,8 @@ MVP Top priorities:
      - Fix bug in frontend: uses a hardcoded localhost to access backend                                                         // done
      - Fix bug in backend - users endpoint                                                                                       // done
          updated user (changed username and password and no longer could login)
-     - Add pihole service                                                                                                        // TODO
-  - Build Android App (for proper data input)
-  
+     - Add pihole service                                                                                                        // done
+
 Additional Bugs/ Improvements
 
 - /api/users/{id} does not show all available properties, e.g. filterReviewSelectionStrategyType                                 // done
@@ -28,10 +40,7 @@ Additional Bugs/ Improvements
    // not yet working at all
 - Get rid of need for running ./prepare_balena.sh - e.g. supply proper .dockerignore files in apps directories                   // done
 
-- Further security issues:                                                                                                       // TODO
-  - Everyone can register a new user
-  - This user has unlimited rights, e.g. he can delete existing ones
-  - These issue need to be fixed before exposing the app to the public internet
+- Update of reviewFreqAndTime should trigger a reload of the review timer                                                        // done
 
 ----
 (here below are still some todo tasks)

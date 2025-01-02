@@ -58,16 +58,33 @@ services:
       - frontend
       - backend
 
+  # This is based on https://github.com/klutchell/balena-pihole/tree/main
   pihole:
-    image: pihole/pihole:latest
+    build:
+      context: .
+      dockerfile: ./apps/pihole/Dockerfile
+    #image: pihole/pihole:latest
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
-    ports:
-      - '53:53/tcp'
-      - '53:53/udp'
-      - '67:67/udp' # Only required if you are using Pi-hole as your DHCP server
-      - '8080:80/tcp'
+    #ports:
+    #  - '53:53/tcp'
+    #  - '53:53/udp'
+    #  - '67:67/udp' # Only required if you are using Pi-hole as your DHCP server
+    #  - '8080:80/tcp'
+    dns:
+      - '127.0.0.1'
+      - '1.1.1.1'
+    network_mode: host
+    tmpfs:
+      - /var/log/pihole
     environment:
       TZ: 'Europe/Vienna'
+      DNSMASQ_LISTENING: all
+      # Could alternatively also use Google DNS, e.g. 8.8.8.8;8.8.4.4 (pihole default)
+      PIHOLE_DNS_: 1.1.1.1;1.0.0.1
+      WEBPASSWORD: balena
+      #VIRTUAL_HOST: balena-devices.com
+      WEB_PORT: 8080
+      WEB_BIND_ADDR: 0.0.0.0
       # WEBPASSWORD: 'set a secure password here or it will be random'
       # - run the following to get the password:
       # sudo docker logs pihole | grep random

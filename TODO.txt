@@ -1,5 +1,6 @@
 MVP Top priorities:
   - Build Android App (for proper data input)                                                                                    // TODO
+  - Fix pihole issues                                                                                                            // done
   - Fix security issues:                                                                                                         // TODO
       - Everyone can register a new user
          - make authorization for register endpoint mandatory

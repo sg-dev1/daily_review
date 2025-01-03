@@ -32,6 +32,9 @@ import * as fs from 'fs';
 import { checkedHttpException } from '../utils/checkedHttpException';
 import { GetUser } from '../auth/utils/get-user.decorator';
 import { User } from '../user/entities/user.entity';
+import { Roles } from '../auth/utils/roles.decorator';
+import { Role } from '../auth/utils/role.enum';
+import { checkedModifyOperation } from '../utils/modify.check';
 
 @Controller('text-snippet')
 export class TextSnippetController {
@@ -58,6 +61,7 @@ export class TextSnippetController {
   }
 
   @Get()
+  @Roles(Role.Admin)
   async findAll(): Promise<TextSnippetControllerResultWithData> {
     try {
       const data: TextSnippet[] = await this.textSnippetService.findAll();
@@ -78,17 +82,38 @@ export class TextSnippetController {
     }
   }
 
-  @Get(':id')
-  async findOne(
-    @Param('id') id: string,
-  ): Promise<TextSnippetControllerResultWithSingleData> {
+  @Get('list')
+  async findAllForUser(
+    @GetUser() executingUser: User,
+  ): Promise<TextSnippetControllerResultWithData> {
     try {
-      const data = await this.textSnippetService.findOne(+id);
+      const data: TextSnippet[] =
+        await this.textSnippetService.findAllForUser(executingUser);
+      const dataAsDto: TextSnippet[] = data.map(
+        (entity: TextSnippet) => entity,
+      );
       return {
         success: true,
-        data,
+        data: dataAsDto,
         message: 'Text Snippet Fetched Successfully',
       };
+    } catch (error: unknown) {
+      return {
+        success: false,
+        message: checkedHttpException(error),
+        data: [],
+      };
+    }
+  }
+
+  @Get(':id')
+  async findOne(
+    @GetUser() executingUser: User,
+    @Param('id') id: string,
+  ): Promise<TextSnippetControllerResultWithSingleData> {
+    let data: TextSnippet | null = null;
+    try {
+      data = await this.textSnippetService.findOne(+id);
     } catch (error: unknown) {
       return {
         success: false,
@@ -96,13 +121,27 @@ export class TextSnippetController {
         data: null,
       };
     }
+
+    const nonNullData: TextSnippet = data;
+    checkedModifyOperation(executingUser, nonNullData.userId);
+
+    return {
+      success: true,
+      data: nonNullData,
+      message: 'Text Snippet Fetched Successfully',
+    };
   }
 
   @Patch(':id')
   async update(
+    @GetUser() executingUser: User,
     @Param('id') id: string,
     @Body() updateTextSnippetDto: UpdateTextSnippetDto,
   ): Promise<TextSnippetControllerResult> {
+    // only to check if access of this data is allowed
+    const data = await this.textSnippetService.findOne(+id);
+    checkedModifyOperation(executingUser, data.userId);
+
     try {
       await this.textSnippetService.update(+id, updateTextSnippetDto);
       return {
@@ -118,7 +157,14 @@ export class TextSnippetController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<TextSnippetControllerResult> {
+  async remove(
+    @GetUser() executingUser: User,
+    @Param('id') id: string,
+  ): Promise<TextSnippetControllerResult> {
+    // only to check if access of this data is allowed
+    const data = await this.textSnippetService.findOne(+id);
+    checkedModifyOperation(executingUser, data.userId);
+
     try {
       await this.textSnippetService.remove(+id);
       return {

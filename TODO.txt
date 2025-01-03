@@ -1,9 +1,9 @@
 MVP Top priorities:
   - Build Android App (for proper data input)                                                                                    // TODO
   - Fix pihole issues                                                                                                            // done
-  - Fix security issues:                                                                                                         // TODO
+  - Fix security issues:                                                                                                         // in progess
       - Everyone can register a new user
-         - make authorization for register endpoint mandatory
+         - make authorization for register endpoint mandatory  --> removed it and use UserController.create()
          - create default user admin (password: admin) when (users) database is empty
          - only admin user allowed to create new users --> could remove register endpoint completely
          - only admin is allowed to edit data of other users
@@ -11,10 +11,13 @@ MVP Top priorities:
       - This user has unlimited rights, e.g. he can delete existing ones
          - add role based access control (admin vs normal user)
       - These issue need to be fixed before exposing the app to the public internet
-      - Certificates for reverse proxy are committed to git 
+      - Limit access to swagger page (e.g. Http basic auth)                                                                      // TODO
+           (could add without auth in "development" mode and use "production" for deployed app)
+      - Certificates for reverse proxy are committed to git                                                                      // TODO
         - Should have a private folder excluded from git
         - Could even check out if using Let's encrypt would be an option to get rid of certificate warnings
 
+   - Bug: Renaming user causes app to crash (tries to unsubscribe non existing user from reviews)                                // TODO
 
   - Test production setup (see how it performs when it is sending mails, e.g. possible to deploy to Raspberry Pi?)
      - Raspberry Pi deployement did not work, so use Raspberry Pi 3

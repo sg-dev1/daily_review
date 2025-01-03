@@ -11,7 +11,6 @@ import { AuthService } from './auth.service';
 import { UserLoginDto } from './dto/user-login.dto';
 import type { Request, Response } from 'express';
 import { Public } from './utils/public.decorator';
-import { RegisterRequestDto } from './dto/register-request.dto';
 import { User } from 'src/user/entities/user.entity';
 //import { UAParser } from 'ua-parser-js';
 
@@ -61,6 +60,7 @@ export class AuthController {
     return response.status(HttpStatus.NO_CONTENT).json({});
   }
 
+  /*
   @Post('register')
   async register(
     @Req()
@@ -73,4 +73,5 @@ export class AuthController {
     response.cookie('jwt', accessToken, { httpOnly: true });
     return response.status(HttpStatus.NO_CONTENT).json({});
   }
+  */
 }

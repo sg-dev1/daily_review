@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { JwtPayloadDto } from '../dto/jwt-payload.dto';
@@ -32,10 +32,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     // example output payload { username: 'user2xxxxxxx', iat: 1732527504, exp: 1732613904 }
 
     // check if user exists
-    const user = await this.userService.findOneByUsernameChecked(
-      payload.username,
-    );
-    // TODO further checks would be: is user not disabled, etc.
+    const user = await this.userService.findOneByUsername(payload.username);
+    if (user === null) {
+      throw new UnauthorizedException('User not found');
+    }
+    // Further checks would be: is user not disabled, etc.
+    if (user.isDisabled) {
+      throw new UnauthorizedException('Disabled user');
+    }
 
     // Note: Important to return the User object s.t. it can be retrieved with @GetUser() decorator
     return user;

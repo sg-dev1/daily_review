@@ -14,6 +14,10 @@ import { FilterReviewSelectionStrategyType } from '../entities/user.entity';
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty({ required: false })
   @IsOptional()
+  isDisabled?: boolean;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsInt()
   @IsPositive()
   numReviewItemsToSend?: number;

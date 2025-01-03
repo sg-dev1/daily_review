@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Mig1735210871690 implements MigrationInterface {
-    name = 'Mig1735210871690'
+export class Mig1735900786249 implements MigrationInterface {
+    name = 'Mig1735900786249'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "text_snippet" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "text" character varying NOT NULL, "bookTitle" character varying NOT NULL, "bookAuthor" character varying NOT NULL, "note" character varying NOT NULL, "location" character varying NOT NULL, "userId" integer NOT NULL, "reviewCount" integer NOT NULL, CONSTRAINT "PK_faa9e995b8fcc54435feb168239" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "public"."user_filterreviewselectionstrategytype_enum" AS ENUM('author', 'title', 'both')`);
-        await queryRunner.query(`CREATE TABLE "user" ("id" SERIAL NOT NULL, "email" character varying NOT NULL, "username" character varying NOT NULL, "password" character varying NOT NULL, "numReviewItemsToSend" integer NOT NULL, "reviewFreqAndTime" character varying NOT NULL, "filterReviewSelectionStrategyType" "public"."user_filterreviewselectionstrategytype_enum" NOT NULL DEFAULT 'title', "filterReviewStrategyAuthor" character varying NOT NULL DEFAULT '', "filterReviewStrategyTitle" character varying NOT NULL DEFAULT '', CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "user" ("id" SERIAL NOT NULL, "email" character varying NOT NULL, "username" character varying NOT NULL, "password" character varying NOT NULL, "isAdmin" boolean NOT NULL DEFAULT false, "isDisabled" boolean NOT NULL DEFAULT false, "numReviewItemsToSend" integer NOT NULL, "reviewFreqAndTime" character varying NOT NULL, "filterReviewSelectionStrategyType" "public"."user_filterreviewselectionstrategytype_enum" NOT NULL DEFAULT 'title', "filterReviewStrategyAuthor" character varying NOT NULL DEFAULT '', "filterReviewStrategyTitle" character varying NOT NULL DEFAULT '', CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE UNIQUE INDEX "IDX_78a916df40e02a9deb1c4b75ed" ON "user" ("username") `);
         await queryRunner.query(`ALTER TABLE "text_snippet" ADD CONSTRAINT "FK_e692e1f84216c26bebb3343b1d7" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
     }

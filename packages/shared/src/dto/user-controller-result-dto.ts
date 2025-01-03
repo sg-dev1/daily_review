@@ -3,6 +3,8 @@ import { CreateUserDtoType } from './user-controller-types';
 export interface UserDto extends CreateUserDtoType {
   id: number;
 
+  isDisabled: boolean;
+
   numReviewItemsToSend: number;
   reviewFreqAndTime: string;
 

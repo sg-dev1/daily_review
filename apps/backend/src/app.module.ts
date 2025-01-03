@@ -11,9 +11,17 @@ import { APP_GUARD } from '@nestjs/core';
 import { TextSnippetModule } from './text-snippet/text-snippet.module';
 import { MailModule } from './mail/mail.module';
 import { ReviewScheduleModule } from './review-schedule/review-schedule.module';
+import { RolesGuard } from './auth/utils/roles.guard';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormConfig), UserModule, AuthModule, TextSnippetModule, MailModule, ReviewScheduleModule],
+  imports: [
+    TypeOrmModule.forRoot(ormConfig),
+    UserModule,
+    AuthModule,
+    TextSnippetModule,
+    MailModule,
+    ReviewScheduleModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
@@ -23,6 +31,10 @@ import { ReviewScheduleModule } from './review-schedule/review-schedule.module';
     {
       provide: APP_GUARD,
       useClass: JwtGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
     JwtStrategy,
   ],

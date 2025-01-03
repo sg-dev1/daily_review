@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,12 +19,17 @@ import {
   UserDto,
 } from '@repo/shared';
 import { checkedHttpException } from '../utils/checkedHttpException';
+import { Roles } from '../auth/utils/roles.decorator';
+import { Role } from '../auth/utils/role.enum';
+import { GetUser } from '../auth/utils/get-user.decorator';
+import { checkedModifyOperation } from '../utils/modify.check';
 
 @Controller('users') //route group
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @Roles(Role.Admin)
   async create(
     @Body() createUserDto: CreateUserDto,
   ): Promise<UserControllerResult> {
@@ -42,6 +48,7 @@ export class UserController {
   }
 
   @Get()
+  @Roles(Role.Admin)
   async findAll(): Promise<UserControllerResultWithData> {
     try {
       const data: User[] = await this.userService.findAll();
@@ -65,8 +72,10 @@ export class UserController {
 
   @Get(':id')
   async findOne(
+    @GetUser() executingUser: User,
     @Param('id') id: string,
   ): Promise<UserControllerResultWithSingleData> {
+    checkedModifyOperation(executingUser, +id);
     try {
       const data = (await this.userService.findOne(+id)).toSanitizedDto();
       return {
@@ -85,9 +94,29 @@ export class UserController {
 
   @Patch(':id')
   async update(
+    @GetUser() executingUser: User,
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserControllerResult> {
+    checkedModifyOperation(executingUser, +id);
+
+    if (!executingUser.isAdmin && updateUserDto.isAdmin) {
+      // not allowed to elevate a normal user to an admin user
+      throw new ForbiddenException('Operation forbidden');
+    }
+    if (
+      executingUser.isAdmin &&
+      executingUser.id === +id &&
+      (updateUserDto.isAdmin === false || updateUserDto.isDisabled === true)
+    ) {
+      const admins = await this.userService.findAllAdmins();
+      if (admins.length === 1) {
+        throw new ForbiddenException(
+          'Not allowed to remove/disable the last admin',
+        );
+      }
+    }
+
     try {
       await this.userService.update(+id, updateUserDto);
       return {
@@ -103,7 +132,19 @@ export class UserController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<UserControllerResult> {
+  async remove(
+    @GetUser() executingUser: User,
+    @Param('id') id: string,
+  ): Promise<UserControllerResult> {
+    checkedModifyOperation(executingUser, +id);
+
+    if (executingUser.isAdmin && executingUser.id === +id) {
+      const admins = await this.userService.findAllAdmins();
+      if (admins.length === 1) {
+        throw new ForbiddenException('Not allowed to delete the last admin');
+      }
+    }
+
     try {
       await this.userService.remove(+id);
       return {

@@ -36,6 +36,14 @@ export class User {
   })
   password!: string;
 
+  @Column({ default: false })
+  isAdmin!: boolean;
+
+  @Column({ default: false })
+  isDisabled!: boolean;
+
+  // ---
+
   @Column()
   numReviewItemsToSend!: number;
 

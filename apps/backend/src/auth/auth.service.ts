@@ -3,19 +3,10 @@ import { JwtService } from '@nestjs/jwt';
 import { UserLoginDto } from './dto/user-login.dto';
 import { User } from 'src/user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { RegisterRequestDto } from './dto/register-request.dto';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { MailService } from '../mail/mail.service';
 import { ReviewScheduleService } from '../review-schedule/review-schedule.service';
 import { UserService } from '../user/user.service';
-
-/*
-const BASE_OPTIONS: SignOptions = {
-  issuer: 'https://localhost:7777',
-  audience: 'https://localhost:7777',
-};
-*/
 
 @Injectable()
 export class AuthService {
@@ -45,13 +36,8 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
+  /*
   async register(user: RegisterRequestDto): Promise<string> {
-    const existingUser = await this.userService.findOneByUsername(
-      user.username,
-    );
-    if (existingUser) {
-      throw new BadRequestException('username already exists');
-    }
     const newUser = await this.userService.create(user);
 
     await this.mailService.sendUserConfirmation(
@@ -63,4 +49,5 @@ export class AuthService {
 
     return this.login(newUser);
   }
+  */
 }

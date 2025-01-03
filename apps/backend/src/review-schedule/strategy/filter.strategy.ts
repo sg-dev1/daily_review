@@ -17,7 +17,9 @@ export class FilterReviewSelectionStrategy implements IReviewSelectionStrategy {
     const filterList: string[] = filterTextLowercase.split('|');
 
     return input.filter((value: TextSnippet) => {
-      const filterProperty = (value as any)[propertyToFilter];
+      const filterProperty: string | undefined = (value as any)[
+        propertyToFilter
+      ];
 
       if (filterProperty === undefined) {
         throw new Error(

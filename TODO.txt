@@ -1,7 +1,7 @@
 MVP Top priorities:
   - Build Android App (for proper data input)                                                                                    // TODO
   - Fix pihole issues                                                                                                            // done
-  - Fix security issues:                                                                                                         // in progess
+  - Fix security issues:                                                                                                         // done
       - Everyone can register a new user
          - make authorization for register endpoint mandatory  --> removed it and use UserController.create()
          - create default user admin (password: admin) when (users) database is empty
@@ -11,14 +11,21 @@ MVP Top priorities:
       - This user has unlimited rights, e.g. he can delete existing ones
          - add role based access control (admin vs normal user)
       - These issue need to be fixed before exposing the app to the public internet
-      - Limit access to swagger page (e.g. Http basic auth)                                                                      // TODO
+      - Limit access to swagger page (e.g. Http basic auth)                                                                      // done
            (could add without auth in "development" mode and use "production" for deployed app)
-      - Certificates for reverse proxy are committed to git                                                                      // TODO
+      - Certificates for reverse proxy are committed to git                                                                      // done
         - Should have a private folder excluded from git
         - Could even check out if using Let's encrypt would be an option to get rid of certificate warnings
 
-   - Bug: Renaming user causes app to crash (tries to unsubscribe non existing user from reviews)                                // TODO
 
+Low prio stuff:
+   - Use a Let's Encrypt certificate for the reverse proxy                                                                       // TODO
+   - Bug: Renaming user causes app to crash (tries to unsubscribe non existing user from reviews)                                // TODO
+     - issue seems to only appear when app is run in dev mode (turbo dev), so no prio to fix this
+
+
+---
+Others:
   - Test production setup (see how it performs when it is sending mails, e.g. possible to deploy to Raspberry Pi?)
      - Raspberry Pi deployement did not work, so use Raspberry Pi 3
       - Fixed issues:  

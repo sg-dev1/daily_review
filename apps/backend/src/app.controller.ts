@@ -14,10 +14,6 @@ export class AppController {
     response: Response,
   ): void {
     //console.log('process.env.NODE_ENV', process.env.NODE_ENV);
-    if (process.env.NODE_ENV === 'development') {
-      response.redirect('/api-docs');
-    } else {
-      throw new ForbiddenException('forbidden');
-    }
+    response.redirect('/api-docs');
   }
 }

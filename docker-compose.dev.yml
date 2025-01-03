@@ -45,7 +45,7 @@ services:
     #image: nginx:1.27.2-alpine3.20
     restart: unless-stopped
     volumes:
-      - ./apps/reverse-proxy/ssl:/etc/nginx/ssl
+      - ./apps/reverse-proxy/ssl/private:/etc/nginx/ssl
     ports:
       - 80:80
       - 443:443

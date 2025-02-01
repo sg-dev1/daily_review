@@ -12,6 +12,11 @@ Besides the apps already present in the official starter (see [original README](
 
 ## Initial Setup
 
+How to log in after first startup:
+Username: admin, Password: admin
+
+It is recommended to change the password of this default admin account immediately.
+
 ### Install Node.js
 
 - Developed using Node.js v22.12.0 on Linux Mint

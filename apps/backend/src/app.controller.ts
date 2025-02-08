@@ -1,4 +1,4 @@
-import { Controller, ForbiddenException, Get, Res } from '@nestjs/common';
+import { Controller, Get, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Public } from './auth/utils/public.decorator';
 import type { Response } from 'express';

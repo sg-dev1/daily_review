@@ -15,3 +15,12 @@ export interface IReviewSelectionStrategy {
     filter: ReviewFilterType,
   ): TextSnippet[];
 }
+
+export const reviewFilterTypeToString = (
+  reviewFilter: ReviewFilterType,
+): string => {
+  return (
+    `ReviewFilterType {author: ${reviewFilter.author}, title:${reviewFilter.title}, ` +
+    `matchSubstring ${reviewFilter.matchSubstring}, randomShuffleResult: ${reviewFilter.randomShuffleResult}}`
+  );
+};

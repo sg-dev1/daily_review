@@ -10,7 +10,7 @@ import {
 import * as cookieParser from 'cookie-parser';
 import * as expressBasicAuth from 'express-basic-auth';
 
-const setupSwagger = (app: INestApplication) => {
+const setupSwagger = (app: INestApplication): void => {
   if (process.env.NODE_ENV === 'production') {
     app.use(
       ['/api-docs', '/api-docs-json', '/api-docs-yaml'],

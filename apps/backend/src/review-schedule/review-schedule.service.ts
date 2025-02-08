@@ -8,6 +8,7 @@ import { RandomReviewSelectionStrategy } from './strategy/random.strategy';
 import {
   IReviewSelectionStrategy,
   ReviewFilterType,
+  reviewFilterTypeToString,
 } from './strategy/review-selection.strategy';
 import { FilterReviewSelectionStrategy } from './strategy/filter.strategy';
 import { TextSnippet } from '../text-snippet/entities/text-snippet.entity';
@@ -77,6 +78,10 @@ export class ReviewScheduleService {
     //       Seems that you need to install cron package (in correct version) to get the
     //       CronJob type ...
     const job = new CronJob(reviewFreqAndTime, async () => {
+      if (this.debug) {
+        console.log('Starting review sender for user', user.username);
+      }
+
       // 0) Check if user still exists in db (e.g. was it deleted in between)?
       const checkedUser = await this.userService.findOneByUsername(
         user.username,
@@ -101,6 +106,12 @@ export class ReviewScheduleService {
         await this.textSnippetService.findAllForUserSortedByReviewCount(
           userFromDb,
         );
+
+      if (this.debug) {
+        console.log(
+          `Loaded all ${textSnippets.length} reviews for user ${user.username}`,
+        );
+      }
 
       // 2) Apply the selection algorithm
       // a) Most basic random strategy
@@ -150,6 +161,13 @@ export class ReviewScheduleService {
         FilterReviewSelectionStrategy.name
       ].selectReviews(textSnippets, numTextSnippetsToSelect, reviewFilter);
 
+      if (this.debug) {
+        console.log(
+          `Filtered ${reviewsToSend.length}(/${numTextSnippetsToSelect}) reviews for user ${user.username}` +
+            `using filter ${reviewFilterTypeToString(reviewFilter)}. Will send review mail now ...`,
+        );
+      }
+
       if (reviewsToSend.length === 0) {
         console.warn(
           'No reviews to send could be found. Do not send a review email.',
@@ -188,6 +206,9 @@ export class ReviewScheduleService {
 
     this.schedulerRegistry.addCronJob(user.username, job);
     this.userService.addSubscriber(user, async (userObj: User) => {
+      if (this.debug) {
+        console.log(`Adding new subscriber ${userObj.username}`);
+      }
       this.removeUserFromReview(userObj);
       this.addNewUserForReview(userObj);
     });
@@ -196,6 +217,9 @@ export class ReviewScheduleService {
   }
 
   removeUserFromReview(user: User): void {
+    if (this.debug) {
+      console.log(`Deleting existing subscriber ${user.username}`);
+    }
     // delete cronjobs with SchedulerRegistry#deleteCronJob
     this.schedulerRegistry.deleteCronJob(user.username);
   }

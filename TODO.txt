@@ -1,8 +1,22 @@
 Future tasks:
-  - Add frontend UI to be able to
-     - Add/remove users, change password etc.
-     - Edit review settings for a user
-     - View TextSnippets for a user, edit, delete them, create new ones
+  - Frontend using web project for that
+    - Features:
+      - Add/remove users, change password etc. (User Management)
+      - Edit review settings for a user (Review Settings Management)
+      - View TextSnippets for a user, edit, delete them, create new ones (Text Snippet Management)
+    - Techstack:
+      - Antd
+      - Redux
+    - TODOs
+      - implement auth/profile in backend
+      - implement auth/logout in backend
+      - Add login page
+      - Implement redirect to login page when not logged in
+      - Implement User Management
+
+      - Implement Review Settings Management
+      - Implement Text Snippet Management
+     
 
 
 Low prio stuff:

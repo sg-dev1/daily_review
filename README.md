@@ -159,8 +159,8 @@ pnpm install @types/multer --save-dev --recursive --filter=backend
 ## Docker Setup
 
 - The `.env` file of `apps/backend` is not used
-- Instead there are `.env` files for `backend` and `database` in `config` folder (currently only in a development setup)
-- All services are defined in the main `docker-compose.yml` (currently for development setup only)
+- Instead there are `.env` files for `backend` and `database` in `config` folder
+- All services are defined in the main `docker-compose.yml`
 - ATTENTION: The `docker-compose.yml` is currently setup to drop the tables and rerun the migrations each launch
   - see `config/backend_dev.env`: `NODE_MIGRATIONS_RERUN` and `NODE_DB_DROP` set to `true`
   - Note that `apps/backend/src/config/ormconfig.ts` sets `dropSchema` and `migrationsRun` config in this case
@@ -170,7 +170,7 @@ pnpm install @types/multer --save-dev --recursive --filter=backend
 Run the following:
 
 ```
-docker compose -f ./docker-compose.dev.yml build
+docker compose build
 ```
 
 ### Run the docker containers
@@ -184,7 +184,7 @@ pnpm db:down
 Run the following:
 
 ```
-docker compose -f ./docker-compose.dev.yml up -d
+docker compose up -d
 ```
 
 Now go into a browser at http://localhost (or https://localhost), you will be forwarded to the https site,

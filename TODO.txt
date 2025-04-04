@@ -1,5 +1,18 @@
+Future tasks:
+  - Add frontend UI to be able to
+     - Add/remove users, change password etc.
+     - Edit review settings for a user
+     - View TextSnippets for a user, edit, delete them, create new ones
+
+
+Low prio stuff:
+   - Bug: Renaming user causes app to crash (tries to unsubscribe non existing user from reviews)                                // TODO
+     - issue seems to only appear when app is run in dev mode (turbo dev), so no prio to fix this
+
+
+---
 MVP Top priorities:
-  - Build Android App (for proper data input)                                                                                    // TODO
+  - Build Android App (for proper data input)                                                                                    // done
   - Fix pihole issues                                                                                                            // done
   - Fix security issues:                                                                                                         // done
       - Everyone can register a new user
@@ -17,14 +30,6 @@ MVP Top priorities:
         - Should have a private folder excluded from git
         - Could even check out if using Let's encrypt would be an option to get rid of certificate warnings
 
-
-Low prio stuff:
-   - Use a Let's Encrypt certificate for the reverse proxy                                                                       // TODO
-   - Bug: Renaming user causes app to crash (tries to unsubscribe non existing user from reviews)                                // TODO
-     - issue seems to only appear when app is run in dev mode (turbo dev), so no prio to fix this
-
-
----
 Others:
   - Test production setup (see how it performs when it is sending mails, e.g. possible to deploy to Raspberry Pi?)
      - Raspberry Pi deployement did not work, so use Raspberry Pi 3

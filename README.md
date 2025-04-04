@@ -8,6 +8,7 @@ Besides the apps already present in the official starter (see [original README](
 
 - `frontend`: a [Next.js](https://nextjs.org/) app
 - `backend`: a [Nest.js](https://nestjs.com/) app
+- `web`: a second [Next.js](https://nextjs.org/) app
 - `@repo/shared`: shared Typescript code between frontend and backend
 
 ## Initial Setup

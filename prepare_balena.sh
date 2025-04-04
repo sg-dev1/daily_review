@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# NOTE: This script no longer needs to be run thanks to the .dockerignore file escluding all these folders
+# NOTE: This script no longer needs to be run thanks to the .dockerignore file excluding all these folders
 #       from the build.
 #
 rm -rf node_modules

@@ -1,4 +1,6 @@
+#
 # Postgres instance for development
+#
 services:
   db:
     image: postgres

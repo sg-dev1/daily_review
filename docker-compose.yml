@@ -1,6 +1,11 @@
-version: '2'
+#
+# Production docker compose file.
+# Expose service via nginx on ports 443 (https) and 80 (http).
+# Http traffic is forwarded to https.
+#
 services:
   frontend:
+    container_name: frontend
     build:
       context: .
       dockerfile: ./apps/frontend/Dockerfile
@@ -11,23 +16,13 @@ services:
     #  - 3000:3000
 
   backend:
+    container_name: backend
     build:
       context: .
-      dockerfile: ./apps/backend/Dockerfile.rp3
+      dockerfile: ./apps/backend/Dockerfile
     restart: unless-stopped
-    environment:
-      - DB_HOST=database
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_DATABASE=my_database
-      - PORT=7777
-      - NODE_ENV=production
-      #- NODE_MIGRATIONS_RERUN=true
-      #- NODE_DB_DROP=true
-      # To generate a strong secret, you can run the following command in your terminal:
-      # node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
-      #- JWT_SECRET=secret
-      - JWT_EXPERIRES_IN=1d
+    env_file:
+      - config/backend_dev.env
     # Expose port in development setup (e.g. to access Swagger UI)
     #ports:
     #  - 7777:7777
@@ -35,10 +30,10 @@ services:
       - database
 
   database:
+    container_name: database
     image: postgres:16.5-alpine3.20
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=my_database
+    env_file:
+      - config/db_dev.env
     restart: unless-stopped
     #ports:
     #  - 5432:5432
@@ -46,11 +41,13 @@ services:
       - db_volume:/var/lib/postgresql/data
 
   rproxy:
+    container_name: rproxy
     build:
       context: .
-      dockerfile: ./apps/reverse-proxy/Dockerfile.rp3
-    #image: rproxy
+      dockerfile: ./apps/reverse-proxy/Dockerfile
     restart: unless-stopped
+    volumes:
+      - ./apps/reverse-proxy/ssl/private-dev:/etc/nginx/ssl
     ports:
       - 80:80
       - 443:443
@@ -58,54 +55,6 @@ services:
       - frontend
       - backend
 
-  # This is based on https://github.com/klutchell/balena-pihole/tree/main
-  pihole:
-    build:
-      context: .
-      dockerfile: ./apps/pihole/Dockerfile
-    #image: pihole/pihole:latest
-    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
-    #ports:
-    #  - '53:53/tcp'
-    #  - '53:53/udp'
-    #  - '67:67/udp' # Only required if you are using Pi-hole as your DHCP server
-    #  - '8080:80/tcp'
-    dns:
-      - '127.0.0.1'
-      - '1.1.1.1'
-    network_mode: host
-    tmpfs:
-      - /var/log/pihole
-    environment:
-      TZ: 'Europe/Vienna'
-      DNSMASQ_LISTENING: all
-      # Could alternatively also use Google DNS, e.g. 8.8.8.8;8.8.4.4 (pihole default)
-      PIHOLE_DNS_: 1.1.1.1;1.0.0.1
-      WEBPASSWORD: balena
-      #VIRTUAL_HOST: balena-devices.com
-      WEB_PORT: 8080
-      WEB_BIND_ADDR: 0.0.0.0
-      # WEBPASSWORD: 'set a secure password here or it will be random'
-      # - run the following to get the password:
-      # sudo docker logs pihole | grep random
-      # - Needed to access http://pi.hole/admin
-    # Volumes store your data between container upgrades
-    volumes:
-      - 'pi_hole_volume:/etc/pihole'
-      - 'pi_hole_dnsmasq_volume:/etc/dnsmasq.d'
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-    #cap_add:
-    #  - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
-    restart: unless-stopped
-
-# e.g. location of db_volume on device:
-# /mnt/data/docker/volumes/2210849_db_volume/_data/
 volumes:
   db_volume:
     name: db_volume
-  # just as test, so it can be populated with data,
-  # in the next step add the pihole service
-  pi_hole_volume:
-    name: pi_hole_volume
-  pi_hole_dnsmasq_volume:
-    name: pi_hole_dnsmasq_volume

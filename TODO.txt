@@ -8,9 +8,10 @@ Future tasks:
       - Antd
       - Redux
     - TODOs
-      - Implement Text Snippet Import
+      - Implement Text Snippet Import    // not so important, can be easily done via swagger
     - Bugs
       - Fix hydration error issues
+      - Fix backend issue that last admin can be deactivated (no one is able to login anymore)
 
 
 Low prio stuff:

@@ -8,10 +8,12 @@ services:
     container_name: frontend
     build:
       context: .
-      dockerfile: ./apps/frontend/Dockerfile
+      #dockerfile: ./apps/frontend/Dockerfile
+      dockerfile: ./apps/web/Dockerfile
     restart: unless-stopped
     environment:
       - API_BASE_URL=http://backend:7777/api/
+      - NEXT_PUBLIC_API_BASE_URI=http://backend:7777/api/
     #ports:
     #  - 3000:3000
 

@@ -8,6 +8,7 @@ import { ColumnsType, SorterResult } from 'antd/es/table/interface';
 import ButtonWithConfirm from '../Utils/ButtonWithConfirm';
 import { deleteTextSnippet, getTextSnippets } from '../../app/slices/textSnippetSlice';
 import TextSnippetForm from './TextSnippetForm';
+import useColumnSearchProps from '../Utils/useColumnSearchProps';
 
 interface DataType extends TextSnippedDto {
   key: React.Key;
@@ -21,6 +22,7 @@ const TextSnippetList = () => {
 
   const [sortedInfo, setSortedInfo] = useState<SorterResult<DataType>>({});
   const [tablePageSize, setTablePageSize] = useState(20);
+  const getColumnSearchProps = useColumnSearchProps<DataType>();
 
   const columns: ColumnsType<DataType> = [
     {
@@ -32,7 +34,7 @@ const TextSnippetList = () => {
       sorter: (a, b) => a.bookTitle.localeCompare(b.bookTitle),
       sortOrder: sortedInfo.columnKey === 'bookTitle' ? sortedInfo.order : null,
       ellipsis: true,
-      // ...getColumnSearchProps('bookTitle'),
+      ...getColumnSearchProps('bookTitle'),
     },
     {
       title: 'Author',
@@ -43,7 +45,7 @@ const TextSnippetList = () => {
       sorter: (a, b) => a.bookAuthor.localeCompare(b.bookAuthor),
       sortOrder: sortedInfo.columnKey === 'bookAuthor' ? sortedInfo.order : null,
       ellipsis: true,
-      // ...getColumnSearchProps('bookAuthor'),
+      ...getColumnSearchProps('bookAuthor'),
     },
     {
       title: 'Location (Page #)',
@@ -51,10 +53,10 @@ const TextSnippetList = () => {
       key: 'location',
       //width: '13%',
       render: (text: string) => <a>{text}</a>,
-      sorter: (a, b) => a.location.localeCompare(b.location),
+      sorter: (a, b) => Number(a.location) - Number(b.location),
       sortOrder: sortedInfo.columnKey === 'location' ? sortedInfo.order : null,
       ellipsis: true,
-      // ...getColumnSearchProps('location'),
+      ...getColumnSearchProps('location'),
     },
     {
       title: 'Review count',
@@ -65,7 +67,7 @@ const TextSnippetList = () => {
       sorter: (a, b) => a.reviewCount - b.reviewCount,
       sortOrder: sortedInfo.columnKey === 'reviewCount' ? sortedInfo.order : null,
       ellipsis: true,
-      // ...getColumnSearchProps('reviewCount'),
+      ...getColumnSearchProps('reviewCount'),
     },
     {
       title: 'Actions',

@@ -1,23 +1,20 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { TableProps } from 'antd';
-import { Button, Space, Table, Skeleton, InputRef, Input, App } from 'antd';
-import type { ColumnType, ColumnsType } from 'antd/es/table';
-import type { SorterResult, FilterDropdownProps } from 'antd/es/table/interface';
-import { SearchOutlined } from '@ant-design/icons';
-import { useParams } from 'next/navigation';
+import { Space, Table, Skeleton, App } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import type { SorterResult } from 'antd/es/table/interface';
 import UserForm from './UserForm';
 import { RootState, useAppDispatch, useAppSelector } from '../../app/store';
 import { deleteUser, getUsers } from '../../app/slices/userSlice';
 import { UserDto } from '@repo/shared';
 import ButtonWithConfirm from '../Utils/ButtonWithConfirm';
+import useColumnSearchProps from '../Utils/useColumnSearchProps';
 
 interface DataType extends UserDto {
   key: React.Key;
 }
-
-type DataIndex = keyof DataType;
 
 const UserList = () => {
   const dispatch = useAppDispatch();
@@ -27,111 +24,8 @@ const UserList = () => {
   const { message } = App.useApp();
 
   const [sortedInfo, setSortedInfo] = useState<SorterResult<DataType>>({});
-  // const [searchText, setSearchText] = useState('');
-  // const [searchedColumn, setSearchedColumn] = useState('');
-  // const searchInput = useRef<InputRef>(null);
+  const getColumnSearchProps = useColumnSearchProps<DataType>();
   const [tablePageSize, setTablePageSize] = useState(20);
-
-  // const handleSearch = (selectedKeys: string[], confirm: FilterDropdownProps['confirm'], dataIndex: DataIndex) => {
-  //   confirm();
-  //   setSearchText(selectedKeys[0] as string);
-  //   setSearchedColumn(dataIndex);
-  // };
-
-  // const handleReset = (clearFilters: () => void, confirm: FilterDropdownProps['confirm'], dataIndex: DataIndex) => {
-  //   clearFilters();
-  //   setSearchText('');
-  //   handleSearch([], confirm, dataIndex);
-  // };
-
-  // interface Correction {
-  //   [key: string]: string;
-  // }
-
-  // const correction: Correction = {
-  //   name: `${dict?.settings.name}`,
-  //   username: `${dict?.settings.username}`,
-  //   email: `${dict?.settings.email}`,
-  // };
-
-  // const reg = new RegExp(Object.keys(correction).join('|'), 'g');
-
-  // const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<DataType> => ({
-  //   filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
-  //     <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
-  //       <Input
-  //         ref={searchInput}
-  //         placeholder={`${dict?.placeholder.search} ${String(dataIndex).replace(reg, (matched) => correction[matched])}`}
-  //         value={selectedKeys[0]}
-  //         onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-  //         onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-  //         style={{ marginBottom: 8, display: 'block' }}
-  //       />
-  //       <Space>
-  //         <Button
-  //           type="primary"
-  //           onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-  //           icon={<SearchOutlined />}
-  //           size="small"
-  //           style={{ width: 90 }}
-  //         >
-  //           {dict?.buttons_general.search}
-  //         </Button>
-  //         <Button
-  //           onClick={() => clearFilters && handleReset(clearFilters, confirm, dataIndex)}
-  //           size="small"
-  //           style={{ width: 90 }}
-  //         >
-  //           {dict?.buttons_general.reset}
-  //         </Button>
-  //         <Button
-  //           type="link"
-  //           size="small"
-  //           onClick={() => {
-  //             confirm({ closeDropdown: false });
-  //             setSearchText((selectedKeys as string[])[0] as string);
-  //             setSearchedColumn(dataIndex);
-  //           }}
-  //         >
-  //           {dict?.buttons_general.filter}
-  //         </Button>
-  //         <Button
-  //           type="link"
-  //           size="small"
-  //           onClick={() => {
-  //             close();
-  //           }}
-  //         >
-  //           {dict?.buttons_general.close}
-  //         </Button>
-  //       </Space>
-  //     </div>
-  //   ),
-  //   filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />,
-  //   onFilter: (value, record) =>
-  //     record[dataIndex]
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes((value as string).toLowerCase()),
-  //   filterDropdownProps: {
-  //     onOpenChange(visible) {
-  //       if (visible) {
-  //         setTimeout(() => searchInput.current?.select(), 100);
-  //       }
-  //     },
-  //   },
-  //   render: (text) =>
-  //     searchedColumn === dataIndex ? (
-  //       <Highlighter
-  //         highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-  //         searchWords={[searchText]}
-  //         autoEscape
-  //         textToHighlight={text ? text.toString() : ''}
-  //       />
-  //     ) : (
-  //       text
-  //     ),
-  // });
 
   // Reformat time string for better display
   const formatTime = (timeString: string): string => {
@@ -169,22 +63,22 @@ const UserList = () => {
       title: 'Username',
       dataIndex: 'username',
       key: 'username',
-      width: '13%',
+      width: '20%',
       render: (text: string) => <a>{text}</a>,
       sorter: (a, b) => a.username.localeCompare(b.username),
       sortOrder: sortedInfo.columnKey === 'username' ? sortedInfo.order : null,
       ellipsis: true,
-      // ...getColumnSearchProps('username'),
+      ...getColumnSearchProps('username'),
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      width: '15%',
+      width: '20%',
       sorter: (a, b) => a.email.localeCompare(b.email),
       sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
       ellipsis: true,
-      // ...getColumnSearchProps('email'),
+      ...getColumnSearchProps('email'),
     },
     // {
     //   title: dict?.settings.lastUpdated,
@@ -196,29 +90,29 @@ const UserList = () => {
     //   sortOrder: sortedInfo.columnKey === 'updatedAt' ? sortedInfo.order : null,
     //   ellipsis: true,
     // },
-    // {
-    //   title: 'Is disabled',
-    //   dataIndex: 'isDisabled',
-    //   key: 'isDisabled',
-    //   width: '8%',
-    //   render: (text: 'active' | 'inactive') => <p>{text}</p>,
-    //   filters: [
-    //     {
-    //       text: 'inactive',
-    //       value: true,
-    //     },
-    //     {
-    //       text: 'active',
-    //       value: false,
-    //     },
-    //   ],
-    //   onFilter: (value, record) => record.isDisabled === value,
-    // },
+    {
+      title: 'Status',
+      dataIndex: 'isDisabled',
+      key: 'isDisabled',
+      width: '15%',
+      render: (value: boolean) => <p>{value ? 'inactive' : 'active'}</p>,
+      filters: [
+        {
+          text: 'inactive',
+          value: true,
+        },
+        {
+          text: 'active',
+          value: false,
+        },
+      ],
+      onFilter: (value, record) => record.isDisabled === value,
+    },
     {
       title: 'Role',
       dataIndex: 'isAdmin',
       key: 'isAdmin',
-      width: '8%',
+      width: '15%',
       render: (value: boolean) => <p>{value ? 'Admin' : 'Normal'}</p>,
       filters: [
         {

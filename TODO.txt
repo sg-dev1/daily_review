@@ -11,9 +11,6 @@ Future tasks:
       - Implement Review Settings Management
       - Implement Text Snippet Management
     - Bugs
-      - Issue with antd (not supporting React 19)
-      - Minor issue where we are shortly redirected to login and then again to the / (root) page
-     
 
 
 Low prio stuff:

@@ -15,7 +15,7 @@ interface AuthSliceState {
 
 const initialState: AuthSliceState = {
   isAuthenticated: false,
-  loading: false,
+  loading: true,
   error: null,
   user: null,
 };

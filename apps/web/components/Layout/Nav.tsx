@@ -37,6 +37,20 @@ export const Nav = () => {
   // If this is not done, the wrong menu item will be marked as currently selected
   const menuItems: MenuProps['items'] = [
     {
+      key: 'review_settings',
+      label: user && user.isAdmin && (
+        <div style={{ display: 'flex', height: '4rem', alignItems: 'center' }}>
+          <Button
+            onClick={() => {
+              router.push('/review-settings');
+            }}
+          >
+            Review Settings
+          </Button>
+        </div>
+      ),
+    },
+    {
       key: 'settings',
       label: user && user.isAdmin && (
         <div style={{ display: 'flex', height: '4rem', alignItems: 'center' }}>
@@ -102,7 +116,7 @@ export const Nav = () => {
         }}
       >
         <Link href={`/`} style={{ display: 'flex', alignItems: 'center', color: 'black' }}>
-          <h3 style={{ marginTop: 0, marginBottom: 0, marginLeft: '2rem' }}>APP</h3>
+          <h3 style={{ marginTop: 0, marginBottom: 0, marginLeft: '2rem' }}>Daily Review App</h3>
         </Link>
         <Menu
           disabledOverflow={true}

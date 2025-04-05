@@ -13,17 +13,8 @@ import { deleteUser, getUsers } from '../../app/slices/userSlice';
 import { UserDto } from '@repo/shared';
 import ButtonWithConfirm from '../Utils/ButtonWithConfirm';
 
-interface DataType {
+interface DataType extends UserDto {
   key: React.Key;
-  name: string;
-  email: string;
-  age: number;
-  address: string;
-  username: string;
-  status: 'active' | 'inactive';
-  id: number;
-  isAdmin: boolean;
-  updatedAt: string;
 }
 
 type DataIndex = keyof DataType;
@@ -206,22 +197,22 @@ const UserList = () => {
     //   ellipsis: true,
     // },
     // {
-    //   title: dict?.settings.status,
-    //   dataIndex: 'status',
-    //   key: 'status',
+    //   title: 'Is disabled',
+    //   dataIndex: 'isDisabled',
+    //   key: 'isDisabled',
     //   width: '8%',
-    //   render: (text: 'active' | 'inactive') => <p>{dict?.settings[text]}</p>,
+    //   render: (text: 'active' | 'inactive') => <p>{text}</p>,
     //   filters: [
     //     {
-    //       text: dict?.settings.active,
-    //       value: 'active',
+    //       text: 'inactive',
+    //       value: true,
     //     },
     //     {
-    //       text: dict?.settings.inactive,
-    //       value: 'inactive',
+    //       text: 'active',
+    //       value: false,
     //     },
     //   ],
-    //   onFilter: (value, record) => record.status === value,
+    //   onFilter: (value, record) => record.isDisabled === value,
     // },
     {
       title: 'Role',
@@ -248,15 +239,7 @@ const UserList = () => {
       render: (_, record) => (
         <Space size="middle">
           <UserForm title={'Edit'} buttonText={'Edit'} user={record} variant="edit" />
-          {/* {record.status === 'active' ? (
-            <Button onClick={() => changeStatus(record, 'inactive')} type="default">
-              {dict?.settings.disable}
-            </Button>
-          ) : (
-            <Button onClick={() => changeStatus(record, 'active')} type="default">
-              {dict?.settings.enable}
-            </Button>
-          )} */}
+
           <ButtonWithConfirm
             handleOk={async () => {
               await dispatch(deleteUser(record.id));

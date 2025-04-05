@@ -5,17 +5,9 @@ import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Space, Row, Col, Select, Form, Input, Drawer, App } from 'antd';
 import { useAppDispatch } from '../../app/store';
 import { createUser, getUsers, updateUser } from '../../app/slices/userSlice';
+import { UserDto } from '@repo/shared';
 
 const { Option } = Select;
-
-type UserType = {
-  name: string;
-  username: string;
-  email: string;
-  isAdmin: boolean;
-  status: 'active' | 'inactive';
-  id: number;
-};
 
 const UserForm = ({
   buttonText,
@@ -25,7 +17,7 @@ const UserForm = ({
 }: {
   buttonText?: string;
   title?: string;
-  user?: UserType;
+  user?: UserDto;
   variant: 'register' | 'edit';
 }) => {
   const dispatch = useAppDispatch();
@@ -43,7 +35,7 @@ const UserForm = ({
               username: values.username,
               email: values.email,
               password: values.password,
-              isAdmin: values.role,
+              isAdmin: values.isAdmin,
             })
           );
           break;
@@ -56,7 +48,8 @@ const UserForm = ({
                 username: values.username,
                 email: values.email,
                 password: values.password,
-                isAdmin: values.role,
+                isAdmin: values.isAdmin,
+                isDisabled: values.isDisabled,
               })
             ));
           break;
@@ -94,11 +87,10 @@ const UserForm = ({
   // Set initial form values when component mounts or user changes
   useEffect(() => {
     form.setFieldsValue({
-      name: user?.name ?? '',
       username: user?.username ?? '',
       email: user?.email ?? '',
-      role: user?.isAdmin ?? false, // Set the default value for the role
-      status: user?.status ?? 'active', // Set the default value for the status
+      isAdmin: user?.isAdmin ?? false, // Set the default value for the isAdmin
+      isDisabled: user?.isDisabled ?? false, // Set the default value for isDisabled
     });
   }, [user, form]);
 
@@ -205,22 +197,26 @@ const UserForm = ({
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name="role" label={'Role'} rules={[{ required: true }]}>
+              <Form.Item name="isAdmin" label={'Role'} rules={[{ required: true }]}>
                 <Select>
                   <Option value={false}>Normal</Option>
                   <Option value={true}>Admin</Option>
                 </Select>
               </Form.Item>
             </Col>
-            {/* <Col span={12}>
-              <Form.Item name="status" label="Status" rules={[{ required: true }]}>
-                <Select>
-                  <Option value="active">{dict?.active}</Option>
-                  <Option value="inactive">{dict?.inactive}</Option>
-                </Select>
-              </Form.Item>
-            </Col> */}
           </Row>
+          {variant === 'edit' && (
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item name="isDisabled" label="Status" rules={[{ required: true }]}>
+                  <Select>
+                    <Option value={false}>{'active'}</Option>
+                    <Option value={true}>{'inactive'}</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
         </Form>
       </Drawer>
     </>

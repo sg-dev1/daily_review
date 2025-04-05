@@ -8,7 +8,6 @@ Future tasks:
       - Antd
       - Redux
     - TODOs
-      - Implement Review Settings Management
       - Implement Text Snippet Management
     - Bugs
 

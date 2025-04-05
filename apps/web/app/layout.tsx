@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import AntdRegistry from './AntdRegistry';
 import { Providers } from './Providers';
+import '@ant-design/v5-patch-for-react-19';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',

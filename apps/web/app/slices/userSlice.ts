@@ -53,7 +53,7 @@ export const updateUser = createAsyncThunk<any, UpdateUserDtoTypeWithId>(
   async (userDtoWithId, { rejectWithValue }) => {
     const { id, ...userDto } = userDtoWithId;
     const requestUrl = ApiEndpoint.getUsersPath() + '/' + id;
-    const payload = ApiEndpoint.makeApiPayload(requestUrl, 'PUT', userDto);
+    const payload = ApiEndpoint.makeApiPayload(requestUrl, 'PATCH', userDto);
     try {
       const response = await axios(payload);
       return response.data;
@@ -89,7 +89,7 @@ export const userSlice = createSlice({
       .addCase(getUsers.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.userList = action.payload;
+        state.userList = action.payload.data;
       })
       .addCase(getUsers.rejected, (state, action) => {
         state.loading = false;

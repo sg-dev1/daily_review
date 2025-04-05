@@ -2,6 +2,7 @@ import Image, { type ImageProps } from 'next/image';
 import { ConfigProvider } from 'antd';
 import theme from './theme/defaultThemeConfig';
 import MainPage from '../components/MainPage';
+import '@ant-design/v5-patch-for-react-19';
 
 type Props = Omit<ImageProps, 'src'> & {
   srcLight: string;

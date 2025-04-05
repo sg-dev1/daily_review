@@ -8,7 +8,7 @@ import { Layout, Menu, theme, Button } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../app/store';
-import { getUser, logoutUser, selectAuth, selectUser } from '../../app/slices/authSlice';
+import { getUser, logoutUser, selectAuth, selectAuthLoading, selectUser } from '../../app/slices/authSlice';
 import AppAvatar from '../Settings/AppAvatar';
 
 const { Header } = Layout;
@@ -16,27 +16,40 @@ const { Header } = Layout;
 export const Nav = () => {
   const dispatch = useAppDispatch<AppDispatch>();
   const isAuthenticated = useAppSelector(selectAuth);
+  const authLoading = useAppSelector(selectAuthLoading);
   const user = useAppSelector(selectUser);
   const pathname = usePathname();
   const pathWithoutLocale = pathname.split('/').slice(2).join('/');
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(getUser());
-      //sessionExpiredInterceptor();
-    } else {
+    dispatch(getUser());
+    //sessionExpiredInterceptor();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!isAuthenticated && !authLoading) {
       router.push('/login');
     }
-  }, [isAuthenticated]);
+  }, [dispatch, isAuthenticated, authLoading, router]);
 
   // Keys must be named accroding to the navigation in order for the selection of the menu items to work accordingly
   // If this is not done, the wrong menu item will be marked as currently selected
   const menuItems: MenuProps['items'] = [
-    // {
-    //   key: 'settings',
-    //   label: user && user.isAdmin && <Settings dict={dict} />,
-    // },
+    {
+      key: 'settings',
+      label: user && user.isAdmin && (
+        <div style={{ display: 'flex', height: '4rem', alignItems: 'center' }}>
+          <Button
+            onClick={() => {
+              router.push('/users');
+            }}
+          >
+            Users
+          </Button>
+        </div>
+      ),
+    },
     {
       key: 'login',
       label: user ? (

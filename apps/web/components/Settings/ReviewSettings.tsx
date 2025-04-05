@@ -66,7 +66,6 @@ const ReviewSettings: React.FC<ReviewSettingsProps> = ({ user }) => {
           form={form}
           layout="vertical"
           name={'form-edit-review-settings'}
-          className="login-form"
           onFinish={handleSubmit}
           onKeyDown={handleKeyDown}
           initialValues={{

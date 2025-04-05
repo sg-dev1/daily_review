@@ -2,6 +2,7 @@ import Image, { type ImageProps } from 'next/image';
 import { ConfigProvider } from 'antd';
 import theme from './theme/defaultThemeConfig';
 import MainPage from '../components/MainPage';
+import { Dynamic } from '../components/Utils/Dynamic';
 
 type Props = Omit<ImageProps, 'src'> & {
   srcLight: string;
@@ -22,7 +23,9 @@ const ThemeImage = (props: Props) => {
 export default function Home(): JSX.Element {
   return (
     <ConfigProvider theme={theme}>
-      <MainPage />
+      <Dynamic>
+        <MainPage />
+      </Dynamic>
     </ConfigProvider>
   );
 }

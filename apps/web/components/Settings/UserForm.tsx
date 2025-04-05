@@ -120,7 +120,6 @@ const UserForm = ({
           form={form}
           layout="vertical"
           name={user?.username ? `form-edit-${user?.username}` : 'form-register-user'}
-          className="login-form"
           onFinish={handleSubmit}
           onKeyDown={handleKeyDown}
         >

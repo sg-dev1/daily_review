@@ -116,8 +116,7 @@ const TextSnippetForm: React.FC<TextSnippetFormProps> = ({ variant, textSnippet 
         <Form
           form={form}
           layout="vertical"
-          name={'form-edit-review-settings'}
-          className="login-form"
+          name={variant === 'update' ? `form-text-snippet-update-${textSnippet?.id}` : 'form-text-snippet-create'}
           onFinish={handleSubmit}
           onKeyDown={handleKeyDown}
         >

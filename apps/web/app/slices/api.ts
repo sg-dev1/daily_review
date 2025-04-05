@@ -22,8 +22,8 @@ export const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URI || '/api'; // /api 
 export default class ApiEndpoint {
   static getLoginPath = () => '/auth/login';
   static getProfilePath = () => '/auth/profile';
+  static getLogoutPath = () => '/auth/logout';
 
-  // static getLogoutPath = () => '/auth/logout';
   // static getRegisterPath = () => '/auth/register';
   // static getRefreshTokenPath = () => `/refresh`;
 

@@ -3,7 +3,7 @@
 import React from 'react';
 import { Tooltip, Avatar } from 'antd';
 import { blue, purple, magenta, green, cyan, gold, yellow, lime, orange } from '@ant-design/colors';
-import UserType from '../../app/types/UserType';
+import { UserDto } from '@repo/shared';
 
 const camelize = (str: string): string => {
   if (str.length === 1) return str.toUpperCase();
@@ -44,7 +44,7 @@ const getAvatarColor = (username: string): string => {
   return colours[sum % colours.length] as string;
 };
 
-const AppAvatar: React.FC<{ user: UserType; group: string }> = ({ user, group }) => {
+const AppAvatar: React.FC<{ user: UserDto; group: string }> = ({ user, group }) => {
   return (
     <Tooltip mouseEnterDelay={0.5} mouseLeaveDelay={0.5} title={user?.email}>
       <Avatar

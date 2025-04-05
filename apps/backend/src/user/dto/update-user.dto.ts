@@ -9,7 +9,10 @@ import {
   Matches,
 } from 'class-validator';
 import { FilterReviewSelectionStrategyType } from '../entities/user.entity';
+import { UpdateUserDtoType } from '@repo/shared';
 
+// TODO This should implement UpdateUserDtoType, however there is still the issue with
+//    FilterReviewSelectionStrategyType
 // https://github.com/nestjs/swagger/issues/1074#issuecomment-739850091
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty({ required: false })

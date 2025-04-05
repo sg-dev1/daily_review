@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
   Post,
   Req,
@@ -9,16 +10,18 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserLoginDto } from './dto/user-login.dto';
-import type { Request, Response } from 'express';
+import { response, type Request, type Response } from 'express';
 import { Public } from './utils/public.decorator';
 import { User } from 'src/user/entities/user.entity';
+import { GetUser } from './utils/get-user.decorator';
+import { UserDto } from '@repo/shared';
 //import { UAParser } from 'ua-parser-js';
 
-@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('login')
   async login(
     @Req()
@@ -74,4 +77,32 @@ export class AuthController {
     return response.status(HttpStatus.NO_CONTENT).json({});
   }
   */
+
+  @Get('profile')
+  profile(
+    // @Req()
+    // req: Request,
+    // @Res()
+    // response: Response,
+    @GetUser() executingUser: User,
+  ): UserDto {
+    if (executingUser) {
+      //console.log('executingUser', executingUser);
+      return executingUser.toSanitizedDto();
+    } else {
+      throw new UnauthorizedException('Unauthorized');
+    }
+  }
+
+  @Post('logout')
+  logout(
+    @Req()
+    req: Request,
+    @Res()
+    response: Response,
+    @GetUser() executingUser: User,
+  ): Response {
+    response.cookie('jwt', '', { httpOnly: true });
+    return response.sendStatus(HttpStatus.NO_CONTENT);
+  }
 }

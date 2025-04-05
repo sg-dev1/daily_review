@@ -2,13 +2,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import ApiEndpoint from './api';
 import axios from 'axios';
 import { showErrorMessage } from './showErrorMessage';
-import UserType from '../types/UserType';
+import { CreateUserDtoType, UpdateUserDtoType, UserDto } from '@repo/shared';
 
 // Define a type for the slice state
 export interface UserSliceState {
   loading: boolean;
   error: unknown;
-  userList: UserType[];
+  userList: UserDto[];
 }
 
 const initialState: UserSliceState = {
@@ -16,6 +16,10 @@ const initialState: UserSliceState = {
   error: null,
   userList: [],
 };
+
+export interface UpdateUserDtoTypeWithId extends UpdateUserDtoType {
+  id: number;
+}
 
 // ---
 
@@ -26,11 +30,11 @@ export const getUsers = createAsyncThunk<any, void>('user/getUsers', async (_, {
     const response = await axios(payload);
     return response.data;
   } catch (error: any) {
-    return rejectWithValue(error.response.data.message);
+    return rejectWithValue(error.response.message);
   }
 });
 
-export const createUser = createAsyncThunk<any, UserType, {}>(
+export const createUser = createAsyncThunk<any, CreateUserDtoType, {}>(
   'user/createUser',
   async (registerCredentials, { rejectWithValue }) => {
     const requestUrl = ApiEndpoint.getUsersPath();
@@ -39,21 +43,25 @@ export const createUser = createAsyncThunk<any, UserType, {}>(
       await axios(payload);
       return payload;
     } catch (error: any) {
-      return rejectWithValue(error.response.data.message);
+      return rejectWithValue(error.response.message);
     }
   }
 );
 
-export const updateUser = createAsyncThunk<any, UserType>('user/updateUser', async (userDto, { rejectWithValue }) => {
-  const requestUrl = ApiEndpoint.getUsersPath() + '/' + userDto.id;
-  const payload = ApiEndpoint.makeApiPayload(requestUrl, 'PUT', userDto);
-  try {
-    const response = await axios(payload);
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error.response.data.message);
+export const updateUser = createAsyncThunk<any, UpdateUserDtoTypeWithId>(
+  'user/updateUser',
+  async (userDtoWithId, { rejectWithValue }) => {
+    const { id, ...userDto } = userDtoWithId;
+    const requestUrl = ApiEndpoint.getUsersPath() + '/' + id;
+    const payload = ApiEndpoint.makeApiPayload(requestUrl, 'PUT', userDto);
+    try {
+      const response = await axios(payload);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.message);
+    }
   }
-});
+);
 
 export const deleteUser = createAsyncThunk<any, number>('user/deleteUser', async (userId, { rejectWithValue }) => {
   const requestUrl = ApiEndpoint.getUsersPath() + '/' + userId;
@@ -62,7 +70,7 @@ export const deleteUser = createAsyncThunk<any, number>('user/deleteUser', async
     const response = await axios(payload);
     return response.data;
   } catch (error: any) {
-    return rejectWithValue(error.response.data.message);
+    return rejectWithValue(error.response.message);
   }
 });
 

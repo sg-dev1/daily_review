@@ -28,7 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: JwtPayloadDto): Promise<User> {
-    //console.log('payload', payload);
+    // console.log('[JwtStrategy.validate] payload', payload);
     // example output payload { username: 'user2xxxxxxx', iat: 1732527504, exp: 1732613904 }
 
     // check if user exists

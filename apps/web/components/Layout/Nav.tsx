@@ -1,14 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { MenuProps, Popover } from 'antd';
 import { Layout, Menu, theme, Button } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../app/store';
-import { getUser, selectAuth, selectUser } from '../../app/slices/authSlice';
+import { getUser, logoutUser, selectAuth, selectUser } from '../../app/slices/authSlice';
 import AppAvatar from '../Settings/AppAvatar';
 
 const { Header } = Layout;
@@ -19,10 +19,15 @@ export const Nav = () => {
   const user = useAppSelector(selectUser);
   const pathname = usePathname();
   const pathWithoutLocale = pathname.split('/').slice(2).join('/');
+  const router = useRouter();
 
   useEffect(() => {
-    dispatch(getUser());
-    //sessionExpiredInterceptor();
+    if (isAuthenticated) {
+      dispatch(getUser());
+      //sessionExpiredInterceptor();
+    } else {
+      router.push('/login');
+    }
   }, [isAuthenticated]);
 
   // Keys must be named accroding to the navigation in order for the selection of the menu items to work accordingly
@@ -46,8 +51,7 @@ export const Nav = () => {
                 shape="round"
                 icon={<LogoutOutlined />}
                 onClick={() => {
-                  console.log('logout not supported');
-                  //dispatch(logoutUser());
+                  dispatch(logoutUser());
                 }}
               >
                 Logout

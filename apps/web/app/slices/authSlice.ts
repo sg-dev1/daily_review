@@ -1,33 +1,33 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import UserType from '../types/UserType';
 import { message } from 'antd';
 import ApiEndpoint from './api';
 import axios from 'axios';
-import LoginDtoType from '../types/LoginDtoType';
 import { showErrorMessage } from './showErrorMessage';
 import { RootState } from '../store';
+import { UserDto, UserLoginDtoType } from '@repo/shared';
 
 interface AuthSliceState {
   isAuthenticated: boolean;
   loading: boolean;
   error: unknown;
-  user: UserType | null;
+  user: UserDto | null;
 }
 
 const initialState: AuthSliceState = {
   isAuthenticated: false,
-  loading: true,
+  loading: false,
   error: null,
   user: null,
 };
 
 // ---
 
-export const loginUser = createAsyncThunk<any, LoginDtoType, {}>(
+export const loginUser = createAsyncThunk<any, UserLoginDtoType, {}>(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
     const requestUrl = ApiEndpoint.getLoginPath();
     const payload = ApiEndpoint.makeApiPayload(requestUrl, 'POST', credentials);
+    //console.log('login payload:', payload);
     try {
       await axios(payload);
       return payload;
@@ -37,16 +37,16 @@ export const loginUser = createAsyncThunk<any, LoginDtoType, {}>(
   }
 );
 
-// export const logoutUser = createAsyncThunk<any, void>('auth/logout', async (_, { rejectWithValue }) => {
-//   const requestUrl = ApiEndpoint.getLogoutPath();
-//   const payload = ApiEndpoint.makeApiPayload(requestUrl, 'GET');
-//   try {
-//     await axios(payload);
-//     return payload;
-//   } catch (error: any) {
-//     return rejectWithValue(error.response.data);
-//   }
-// });
+export const logoutUser = createAsyncThunk<any, void>('auth/logout', async (_, { rejectWithValue }) => {
+  const requestUrl = ApiEndpoint.getLogoutPath();
+  const payload = ApiEndpoint.makeApiPayload(requestUrl, 'POST');
+  try {
+    await axios(payload);
+    return payload;
+  } catch (error: any) {
+    return rejectWithValue(error.response.data);
+  }
+});
 
 export const getUser = createAsyncThunk<any, void>('auth/getProfile', async (_, { rejectWithValue }) => {
   const requestUrl = ApiEndpoint.getProfilePath();
@@ -89,19 +89,19 @@ export const authSlice = createSlice({
         state.error = action.payload;
         showErrorMessage(state);
       })
-      // .addCase(logoutUser.pending, (state) => {
-      //   state.loading = true;
-      // })
-      // .addCase(logoutUser.fulfilled, (state) => {
-      //   state.isAuthenticated = false;
-      //   state.loading = false;
-      //   state.error = null;
-      // })
-      // .addCase(logoutUser.rejected, (state, action) => {
-      //   state.isAuthenticated = false;
-      //   state.loading = false;
-      //   state.error = action.payload;
-      // })
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.isAuthenticated = false;
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.isAuthenticated = false;
+        state.loading = false;
+        state.error = action.payload;
+      })
       .addCase(getUser.pending, (state) => {
         state.loading = true;
       })
@@ -125,4 +125,4 @@ export const authSlice = createSlice({
 export const selectAuth = (state: RootState): boolean => state?.auth?.isAuthenticated || false;
 export const selectAuthLoading = (state: RootState) => state.auth.loading;
 export const selectErrorMessage = (state: RootState) => state.auth.error;
-export const selectUser = (state: RootState): UserType | null => state?.auth?.user || null;
+export const selectUser = (state: RootState): UserDto | null => state?.auth?.user || null;

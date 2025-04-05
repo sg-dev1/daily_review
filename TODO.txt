@@ -8,10 +8,6 @@ Future tasks:
       - Antd
       - Redux
     - TODOs
-      - implement auth/profile in backend
-      - implement auth/logout in backend
-      - Add login page
-      - Implement redirect to login page when not logged in
       - Implement User Management
 
       - Implement Review Settings Management

@@ -8,8 +8,9 @@ Future tasks:
       - Antd
       - Redux
     - TODOs
-      - Implement Text Snippet Management
+      - Implement Text Snippet Import
     - Bugs
+      - Fix hydration error issues
 
 
 Low prio stuff:

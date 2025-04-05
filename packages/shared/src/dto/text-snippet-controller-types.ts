@@ -5,3 +5,7 @@ export interface CreateTextSnippetDtoType {
   note: string;
   location: string;
 }
+
+export interface UpdateTextSnippetDtoType extends Partial<CreateTextSnippetDtoType> {
+  id: number;
+}

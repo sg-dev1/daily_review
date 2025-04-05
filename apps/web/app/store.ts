@@ -3,10 +3,12 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { userSlice } from './slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSlice } from './slices/authSlice';
+import { textSnippetSlice } from './slices/textSnippetSlice';
 
 const reducer = combineReducers({
   users: userSlice.reducer,
   auth: authSlice.reducer,
+  textSnippets: textSnippetSlice.reducer,
 });
 
 // The any was needed as a workaround for a strange TypeScript compile error

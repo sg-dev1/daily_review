@@ -7,14 +7,14 @@ import { MenuProps, Popover } from 'antd';
 import { Layout, Menu, theme, Button } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
-import { AppDispatch, useAppDispatch, useAppSelector } from '../../app/store';
+import { useAppDispatch, useAppSelector } from '../../app/store';
 import { getUser, logoutUser, selectAuth, selectAuthLoading, selectUser } from '../../app/slices/authSlice';
 import AppAvatar from '../Settings/AppAvatar';
 
 const { Header } = Layout;
 
 export const Nav = () => {
-  const dispatch = useAppDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectAuth);
   const authLoading = useAppSelector(selectAuthLoading);
   const user = useAppSelector(selectUser);

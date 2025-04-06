@@ -80,6 +80,23 @@ Run the test cases for the backend (currently only backend is supported)
 turbo test
 ```
 
+### Open the UI
+
+The UI for the web application can be opened at `http://localhost:3000/daily-review` if the app is run with `turbo dev`.
+See apps/web/next.config.js for configured base path.
+The reason for that is for reverse proxy compatibility, e.g. one could use a nginx config like
+
+```
+location /daily-review {
+    proxy_pass         http://frontend:3000/;
+    proxy_redirect     off;
+    proxy_set_header   Host $host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Host $server_name;
+}
+```
+
 ### Development database start/stop (within docker)
 
 These commands are defined in the top level package.json scripts:

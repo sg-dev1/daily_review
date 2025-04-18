@@ -33,7 +33,8 @@ services:
 
   database:
     container_name: database
-    image: postgres:16.5-alpine3.20
+    #image: postgres:16.5-alpine3.20
+    image: postgres:16-alpine3.21
     env_file:
       - config/db_dev.env
     restart: unless-stopped

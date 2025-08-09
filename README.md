@@ -2,7 +2,7 @@
 
 The objective of this project was to develop an application capable of storing text excerpts from books and other sources, and delivering them to users on a scheduled basis—such as daily—via email.
 The system comprises a web-based backend integrated with a PostgreSQL database, along with a frontend interface for user management and configuration of user settings.
-An accompanying [Android application]() allows users to capture images of book pages, extract the text using text recognition technology, and send the extracted content directly to the web application.
+An accompanying [Android application](https://github.com/sg-dev1/daily_review_ocr) allows users to capture images of book pages, extract the text using text recognition technology, and send the extracted content directly to the web application.
 
 This app is inspired by [Readwise](https://readwise.io/) providing similar functionality.
 I thought, it should not be that difficult to build a similar experience that can be hosted on your own hardware (e.g. your home server).

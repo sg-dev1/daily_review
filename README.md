@@ -16,9 +16,9 @@ This monorepo is based on the official starter of Turborepo.
 
 Besides the apps already present in the official starter (see [original README](./README_original.md)) the following packages/apps are included:
 
-- `frontend`: a [Next.js](https://nextjs.org/) app
+- `frontend`: a [Next.js](https://nextjs.org/) app (currently not implemented, use `web` project instead)
 - `backend`: a [Nest.js](https://nestjs.com/) app
-- `web`: a second [Next.js](https://nextjs.org/) app
+- `web`: a second [Next.js](https://nextjs.org/) app (built using [antd](https://ant.design/))
 - `@repo/shared`: shared Typescript code between frontend and backend
 
 ## Initial Setup

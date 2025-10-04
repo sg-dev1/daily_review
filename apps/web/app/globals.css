@@ -48,3 +48,7 @@ a {
     display: unset;
   }
 }
+
+.selected-row {
+  background-color: rgb(242, 242, 242);
+}

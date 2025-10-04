@@ -1,22 +1,22 @@
 'use client';
 
 import React, { useMemo, useState, useRef } from 'react';
-import { RootState, useAppDispatch, useAppSelector } from '../../app/store';
+import { RootState, useAppSelector } from '../../app/store';
 import { TextSnippedDto } from '@repo/shared';
-import { Skeleton, Space, Table, TableProps } from 'antd';
+import { Skeleton, Table, TableProps } from 'antd';
 import { ColumnsType, SorterResult } from 'antd/es/table/interface';
-import ButtonWithConfirm from '../Utils/ButtonWithConfirm';
-import { deleteTextSnippet, getTextSnippets } from '../../app/slices/textSnippetSlice';
-import TextSnippetForm from './TextSnippetForm';
 import useColumnSearchProps from '../Utils/useColumnSearchProps';
 
 interface DataType extends TextSnippedDto {
   key: React.Key;
 }
 
-const TextSnippetList = () => {
-  const dispatch = useAppDispatch();
+interface TextSnippetListProps {
+  selectedRowData: TextSnippedDto | null;
+  setSelectedRowData: (value: TextSnippedDto | null) => void;
+}
 
+const TextSnippetList: React.FC<TextSnippetListProps> = ({ selectedRowData, setSelectedRowData }) => {
   const { isAuthenticated, loading } = useAppSelector((state: RootState) => state.auth);
   const textSnippedList: TextSnippedDto[] = useAppSelector((state: RootState) => state.textSnippets.textSnippetsList);
   // Needed for the filters to set the correct data in the table and the pagination,
@@ -33,7 +33,7 @@ const TextSnippetList = () => {
       title: 'Title',
       dataIndex: 'bookTitle',
       key: 'bookTitle',
-      width: '20%',
+      width: '25%',
       render: (text: string) => <a>{text}</a>,
       sorter: (a, b) => a.bookTitle.localeCompare(b.bookTitle),
       sortOrder: sortedInfo.columnKey === 'bookTitle' ? sortedInfo.order : null,
@@ -44,7 +44,7 @@ const TextSnippetList = () => {
       title: 'Author',
       dataIndex: 'bookAuthor',
       key: 'bookAuthor',
-      width: '15%',
+      width: '20%',
       render: (text: string) => <a>{text}</a>,
       sorter: (a, b) => a.bookAuthor.localeCompare(b.bookAuthor),
       sortOrder: sortedInfo.columnKey === 'bookAuthor' ? sortedInfo.order : null,
@@ -55,7 +55,7 @@ const TextSnippetList = () => {
       title: 'Notes',
       dataIndex: 'note',
       key: 'note',
-      width: '15%',
+      width: '20%',
       render: (text: string) => <a>{text}</a>,
       sorter: (a, b) => a.note.localeCompare(b.note),
       sortOrder: sortedInfo.columnKey === 'note' ? sortedInfo.order : null,
@@ -84,30 +84,30 @@ const TextSnippetList = () => {
       ellipsis: true,
       ...getColumnSearchProps('reviewCount'),
     },
-    {
-      title: 'Actions',
-      key: 'action',
-      width: '15%',
-      render: (_, record) => (
-        <Space size="middle">
-          <TextSnippetForm variant="update" textSnippet={record} />
+    // {
+    //   title: 'Actions',
+    //   key: 'action',
+    //   width: '15%',
+    //   render: (_, record) => (
+    //     <Flex wrap gap="small">
+    //       <TextSnippetFormDrawer variant="update" textSnippet={record} />
 
-          <ButtonWithConfirm
-            handleOk={async () => {
-              await dispatch(deleteTextSnippet(record.id));
-              dispatch(getTextSnippets());
-            }}
-            handleCancle={() => {}}
-            title={'Delete'}
-            description={`Do you want to delete the text snippet from '${record.bookTitle} by ${record.bookAuthor}'`}
-            danger
-            type={'primary'}
-          >
-            Delete
-          </ButtonWithConfirm>
-        </Space>
-      ),
-    },
+    //       <ButtonWithConfirm
+    //         handleOk={async () => {
+    //           await dispatch(deleteTextSnippet(record.id));
+    //           dispatch(getTextSnippets());
+    //         }}
+    //         handleCancle={() => {}}
+    //         title={'Delete'}
+    //         description={`Do you want to delete the text snippet from '${record.bookTitle} by ${record.bookAuthor}'`}
+    //         danger
+    //         type={'primary'}
+    //       >
+    //         Delete
+    //       </ButtonWithConfirm>
+    //     </Flex>
+    //   ),
+    // },
   ];
   // text and note better to show in a sider
 
@@ -187,6 +187,10 @@ const TextSnippetList = () => {
     dataSourceToUse = currentDataSource;
   }
 
+  const handleRowClick = (record: DataType) => {
+    setSelectedRowData(record);
+  };
+
   return (
     <>
       {loading && <Skeleton active />}
@@ -195,6 +199,7 @@ const TextSnippetList = () => {
           columns={columns}
           dataSource={dataSourceToUse}
           onChange={handleTableChange}
+          rowClassName={(record, index) => (record.id === selectedRowData?.id ? 'selected-row' : '')}
           pagination={{
             showTotal: (total) => `Total ${dataSourceToUse.length} items.`,
 
@@ -205,6 +210,13 @@ const TextSnippetList = () => {
             onChange: (_, pageSize) => {
               setTablePageSize(pageSize);
             },
+          }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                handleRowClick(record as DataType);
+              },
+            };
           }}
         />
       )}

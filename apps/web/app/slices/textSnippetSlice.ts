@@ -75,6 +75,17 @@ export const deleteTextSnippet = createAsyncThunk<any, number>(
 
 // ---
 
+// Note: Inplace updates like this currently do not work as expected.
+// Reason is the filtering logic in TextSnippetList.
+const updateTextSnippetList = (state: TextSnippetSliceState, action: { payload: TextSnippedDto }) => {
+  const indexInList = state.textSnippetsList.findIndex((textSnippet) => textSnippet.id === action.payload.id);
+  if (indexInList !== -1) {
+    state.textSnippetsList[indexInList] = action.payload;
+  } else {
+    state.textSnippetsList.push(action.payload);
+  }
+};
+
 export const textSnippetSlice = createSlice({
   name: 'text-snippet',
   initialState,
@@ -103,6 +114,7 @@ export const textSnippetSlice = createSlice({
         state.loading = false;
         state.error = null;
         //authSlice.caseReducers.showSuccessMessage();
+        //updateTextSnippetList(state, action);
       })
       .addCase(createTextSnippet.rejected, (state, action) => {
         state.loading = false;
@@ -113,9 +125,10 @@ export const textSnippetSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateTextSnippet.fulfilled, (state) => {
+      .addCase(updateTextSnippet.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
+        //updateTextSnippetList(state, action);
       })
       .addCase(updateTextSnippet.rejected, (state, action) => {
         state.loading = false;

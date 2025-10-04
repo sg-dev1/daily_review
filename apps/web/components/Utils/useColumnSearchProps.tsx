@@ -4,7 +4,8 @@ import React, { useState, useRef, useCallback } from 'react';
 import { Button, Space, InputRef, Input } from 'antd';
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons';
 import type { ColumnType } from 'antd/es/table';
-import type { FilterDropdownProps } from 'antd/es/table/interface';
+import type { FilterConfirmProps, FilterDropdownProps } from 'antd/es/table/interface';
+import { clear } from 'console';
 
 /**
  * React hook that provides search functionality for tables.
@@ -34,8 +35,31 @@ function useColumnSearchProps<DataType>() {
   type DataIndex = keyof DataType;
 
   const handleSearch = useCallback(
-    (selectedKeys: string[], confirm: FilterDropdownProps['confirm'], dataIndex: DataIndex) => {
-      confirm();
+    (
+      selectedKeys: string[],
+      confirm: FilterDropdownProps['confirm'],
+      dataIndex: DataIndex,
+      clearFilters: (() => void) | null,
+      confirmProp?: FilterConfirmProps
+    ) => {
+      if (searchText !== '' && searchedColumn !== '') {
+        // TODO here is a known bug:
+        //   If I have data filtered and I change the filter without a reset before
+        //      the filter is applied to the filtered data (and not the whole data)
+        //       filtering out everything and returning nothing.
+        //   Either it is possible here to force a reset (e.g. handleReset)
+        //     before applying the new filter or
+        //   fix this bug in the TextSnippetList component (maybe it cannot be fixed here,
+        //     but it needs to be fixed in this component).
+        //
+        //   E.g. there the previous filter set could be compared with the current
+        //     --> if they differ (and a previous filter was set at all)
+        //         the new filter was applied on the wrong data ...
+        if (clearFilters !== null) {
+          clearFilters();
+        }
+      }
+      confirm(confirmProp);
       setSearchText(selectedKeys[0] as string);
       setSearchedColumn(String(dataIndex));
     },
@@ -43,10 +67,12 @@ function useColumnSearchProps<DataType>() {
   );
 
   const handleReset = useCallback(
-    (clearFilters: () => void, confirm: FilterDropdownProps['confirm'], dataIndex: DataIndex) => {
-      clearFilters();
+    (clearFilters: (() => void) | null, confirm: FilterDropdownProps['confirm'], dataIndex: DataIndex) => {
+      if (clearFilters !== null) {
+        clearFilters();
+      }
       setSearchText('');
-      handleSearch([], confirm, dataIndex);
+      handleSearch([], confirm, dataIndex, clearFilters);
       setSearchedColumn('');
     },
     [handleSearch]
@@ -80,13 +106,17 @@ function useColumnSearchProps<DataType>() {
               placeholder={`Search `}
               value={selectedKeys[0]}
               onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-              onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+              onPressEnter={() =>
+                handleSearch(selectedKeys as string[], confirm, dataIndex, clearFilters ? clearFilters : null)
+              }
               style={{ marginBottom: 8, display: 'block' }}
             />
             <Space>
               <Button
                 type="primary"
-                onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+                onClick={() =>
+                  handleSearch(selectedKeys as string[], confirm, dataIndex, clearFilters ? clearFilters : null)
+                }
                 icon={<SearchOutlined />}
                 size="small"
                 style={{ width: 90 }}
@@ -94,7 +124,7 @@ function useColumnSearchProps<DataType>() {
                 Search
               </Button>
               <Button
-                onClick={() => clearFilters && handleReset(clearFilters, confirm, dataIndex)}
+                onClick={() => handleReset(clearFilters ? clearFilters : null, confirm, dataIndex)}
                 size="small"
                 style={{ width: 90 }}
               >
@@ -104,9 +134,9 @@ function useColumnSearchProps<DataType>() {
                 type="link"
                 size="small"
                 onClick={() => {
-                  confirm({ closeDropdown: false });
-                  setSearchText((selectedKeys as string[])[0] as string);
-                  setSearchedColumn(String(dataIndex));
+                  handleSearch(selectedKeys as string[], confirm, dataIndex, clearFilters ? clearFilters : null, {
+                    closeDropdown: false,
+                  });
                 }}
               >
                 Filter

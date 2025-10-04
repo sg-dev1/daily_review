@@ -43,18 +43,6 @@ function useColumnSearchProps<DataType>() {
       confirmProp?: FilterConfirmProps
     ) => {
       if (searchText !== '' && searchedColumn !== '') {
-        // TODO here is a known bug:
-        //   If I have data filtered and I change the filter without a reset before
-        //      the filter is applied to the filtered data (and not the whole data)
-        //       filtering out everything and returning nothing.
-        //   Either it is possible here to force a reset (e.g. handleReset)
-        //     before applying the new filter or
-        //   fix this bug in the TextSnippetList component (maybe it cannot be fixed here,
-        //     but it needs to be fixed in this component).
-        //
-        //   E.g. there the previous filter set could be compared with the current
-        //     --> if they differ (and a previous filter was set at all)
-        //         the new filter was applied on the wrong data ...
         if (clearFilters !== null) {
           clearFilters();
         }

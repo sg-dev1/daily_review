@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import { RootState, useAppDispatch, useAppSelector } from '../../app/store';
 import { TextSnippedDto } from '@repo/shared';
 import { Skeleton, Space, Table, TableProps } from 'antd';
@@ -22,6 +22,7 @@ const TextSnippetList = () => {
   // Needed for the filters to set the correct data in the table and the pagination,
   //   e.g. if an filter is active, we want the filtered data source, not all data (textSnippedList / updatedTextSnippetList)
   const [currentDataSource, setCurrentDataSource] = useState<DataType[] | null>(null);
+  const prevFilter = useRef<any>();
 
   const [sortedInfo, setSortedInfo] = useState<SorterResult<DataType>>({});
   const [tablePageSize, setTablePageSize] = useState(20);
@@ -133,25 +134,50 @@ const TextSnippetList = () => {
 
     // Properly handle the filter (always using the correct data source in the table)
     let filterSet = false;
+    let filterChanged = false;
+    let filter: any = {};
     for (let k in filters) {
       if (filters[k]) {
+        if (dbgTableChange) {
+          console.log(' .... filter set', filters[k]);
+        }
         filterSet = true;
-        break;
+
+        if (prevFilter.current && prevFilter.current[k] !== filters[k]) {
+          filterChanged = true;
+          //filter = { k: filters[k], ...filter };
+          filter = { key: k, value: (filters[k] as string[])[0] };
+          if (dbgTableChange) {
+            console.log(' .... filter changed (prev != current)', prevFilter.current[k], filters[k]);
+          }
+        }
       }
     }
-    // TODO could save the currently set filter (so it can be compared later on)
-    //   --> if current filter differs to set filter --> we have filtered the wrong data (extra.currentDataSource is invalid)
-    //   (see TODO in useColumnSearchProps)
 
     if (dbgTableChange) {
       console.log('filters set', filterSet);
       console.log('extra.currentDataSource=', extra.currentDataSource, extra);
     }
     if (filterSet) {
-      setCurrentDataSource(extra.currentDataSource);
+      if (filterChanged) {
+        if (dbgTableChange) {
+          console.log(' .... apply new filter', filter);
+        }
+        const newDataSource = updatedTextSnippetList.filter((value) => {
+          return value[filter.key].toLowerCase().includes(filter.value.toLowerCase());
+        });
+        if (dbgTableChange) {
+          console.log(' .... filtered data source', newDataSource);
+        }
+        setCurrentDataSource(newDataSource);
+      } else {
+        setCurrentDataSource(extra.currentDataSource);
+      }
+      prevFilter.current = filters;
     } else {
       // no filter set --> reset the filtered datasource
       setCurrentDataSource(null);
+      prevFilter.current = null;
     }
   };
 
